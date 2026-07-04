@@ -1,0 +1,158 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  avatarUrl    String?
+  role         Role     @default(USER)
+  language     Lang     @default(RU)
+  createdAt    DateTime @default(now())
+
+  exerciseSessions      ExerciseSession[]
+  pronunciationSessions PronunciationSession[]
+  chatMessages          ChatMessage[]
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Lang {
+  RU
+  KZ
+  JA
+  EN
+}
+
+model Specialist {
+  id              String   @id @default(uuid())
+  name            String
+  photoUrl        String?
+  bio             String?
+  address         String?
+  city            String?
+  phone           String?
+  specializations String[]
+  lat             Float?
+  lng             Float?
+}
+
+model AacCategory {
+  id     String @id @default(uuid())
+  icon   String
+  order  Int    @default(0)
+  nameRu String
+  nameKz String
+  nameJa String
+  nameEn String
+
+  cards AacCard[]
+}
+
+model AacCard {
+  id         String      @id @default(uuid())
+  categoryId String
+  category   AacCategory @relation(fields: [categoryId], references: [id])
+  imageUrl   String
+  order      Int         @default(0)
+  textRu     String
+  textKz     String
+  textJa     String
+  textEn     String
+}
+
+model ExerciseType {
+  id            String @id @default(uuid())
+  slug          String @unique
+  icon          String
+  nameRu        String
+  nameKz        String
+  nameJa        String
+  nameEn        String
+  descriptionRu String
+  descriptionKz String
+  descriptionJa String
+  descriptionEn String
+
+  exercises Exercise[]
+}
+
+model Exercise {
+  id              String       @id @default(uuid())
+  typeId          String
+  type            ExerciseType @relation(fields: [typeId], references: [id])
+  titleRu         String
+  titleKz         String
+  titleJa         String
+  titleEn         String
+  descriptionRu   String
+  descriptionKz   String
+  descriptionJa   String
+  descriptionEn   String
+  instructionRu   String
+  instructionKz   String
+  instructionJa   String
+  instructionEn   String
+  mediaUrl        String?
+  mediaType       MediaType @default(IMAGE)
+  durationSeconds Int?
+  difficulty      Int       @default(1)
+  order           Int       @default(0)
+
+  sessions ExerciseSession[]
+}
+
+enum MediaType {
+  IMAGE
+  GIF
+  VIDEO
+}
+
+model ExerciseSession {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  exerciseId      String
+  exercise        Exercise @relation(fields: [exerciseId], references: [id])
+  completedAt     DateTime @default(now())
+  durationSeconds Int?
+}
+
+model PronunciationSession {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  targetWord String
+  targetLang Lang
+  audioUrl   String?
+  transcript String?
+  aiFeedback String?
+  createdAt  DateTime @default(now())
+}
+
+model ChatMessage {
+  id        String      @id @default(uuid())
+  userId    String
+  user      User        @relation(fields: [userId], references: [id])
+  role      MessageRole
+  content   String
+  createdAt DateTime    @default(now())
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+}
