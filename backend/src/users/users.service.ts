@@ -33,6 +33,16 @@ export class UsersService {
     });
   }
 
+  update(
+    userId: string,
+    data: { name?: string; avatarUrl?: string; language?: Lang },
+  ) {
+    return this.prisma.user.update({
+      where: { id: userId },
+      data,
+    });
+  }
+
   toSafeUser(user: User): SafeUser {
     return {
       id: user.id,
