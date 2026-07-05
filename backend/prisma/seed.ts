@@ -1,8 +1,23 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Role } from '@prisma/client';
+import * as argon2 from 'argon2';
 
 const prisma = new PrismaClient();
 
 async function main() {
+  const adminPasswordHash = await argon2.hash('admin123', {
+    type: argon2.argon2id,
+  });
+  const admin = await prisma.user.upsert({
+    where: { email: 'admin@sayra.com' },
+    update: {},
+    create: {
+      email: 'admin@sayra.com',
+      passwordHash: adminPasswordHash,
+      name: 'Admin',
+      role: Role.ADMIN,
+    },
+  });
+
   await prisma.aacCard.deleteMany();
   await prisma.aacCategory.deleteMany();
   await prisma.exerciseSession.deleteMany();
@@ -251,6 +266,7 @@ async function main() {
     },
   });
 
+  console.log('Seeded admin user:', admin.email);
   console.log('Seeded AAC categories:', food.nameEn, feelings.nameEn);
   console.log('Seeded exercise types:', articulation.nameEn, breathing.nameEn);
   console.log('Seeded specialists:', anna.name, daniyar.name);

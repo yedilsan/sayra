@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AacModule } from './aac/aac.module';
+import { AdminModule } from './admin/admin.module';
 import { AiModule } from './ai/ai.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -24,6 +25,7 @@ import { UsersModule } from './users/users.module';
     AiModule,
     SpecialistsModule,
     ProgressModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],
