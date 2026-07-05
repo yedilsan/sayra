@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { ExercisesModule } from './exercises/exercises.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { PronunciationModule } from './pronunciation/pronunciation.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -16,6 +17,7 @@ import { UsersModule } from './users/users.module';
     AuthModule,
     AacModule,
     ExercisesModule,
+    PronunciationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
