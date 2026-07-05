@@ -8,6 +8,7 @@ async function main() {
   await prisma.exerciseSession.deleteMany();
   await prisma.exercise.deleteMany();
   await prisma.exerciseType.deleteMany();
+  await prisma.specialist.deleteMany();
 
   const food = await prisma.aacCategory.create({
     data: {
@@ -222,8 +223,37 @@ async function main() {
     },
   });
 
+  const anna = await prisma.specialist.create({
+    data: {
+      name: 'Анна Ковалёва',
+      photoUrl: 'https://picsum.photos/seed/anna/200',
+      bio: 'Логопед-дефектолог с 8-летним опытом работы с детьми дошкольного возраста.',
+      address: 'ул. Абая, 12',
+      city: 'Алматы',
+      phone: '+7 701 111 2233',
+      specializations: ['Speech therapist', 'Articulation'],
+      lat: 43.238293,
+      lng: 76.945465,
+    },
+  });
+
+  const daniyar = await prisma.specialist.create({
+    data: {
+      name: 'Данияр Сериков',
+      photoUrl: 'https://picsum.photos/seed/daniyar/200',
+      bio: 'Специалист по коррекции речевого дыхания и заикания.',
+      address: 'пр. Туран, 45',
+      city: 'Астана',
+      phone: '+7 701 444 5566',
+      specializations: ['Speech therapist', 'Breathing therapy'],
+      lat: 51.128207,
+      lng: 71.430411,
+    },
+  });
+
   console.log('Seeded AAC categories:', food.nameEn, feelings.nameEn);
   console.log('Seeded exercise types:', articulation.nameEn, breathing.nameEn);
+  console.log('Seeded specialists:', anna.name, daniyar.name);
 }
 
 main()

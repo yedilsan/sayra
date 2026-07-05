@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { ExercisesModule } from './exercises/exercises.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { PronunciationModule } from './pronunciation/pronunciation.module';
+import { SpecialistsModule } from './specialists/specialists.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -20,6 +21,7 @@ import { UsersModule } from './users/users.module';
     ExercisesModule,
     PronunciationModule,
     AiModule,
+    SpecialistsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
