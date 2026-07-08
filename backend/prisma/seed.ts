@@ -25,83 +25,130 @@ async function main() {
   await prisma.exerciseType.deleteMany();
   await prisma.specialist.deleteMany();
 
-  const food = await prisma.aacCategory.create({
-    data: {
-      imageUrl: 'https://picsum.photos/seed/food-category/200',
+  const aacCategories = [
+    {
       order: 1,
-      nameRu: 'Еда',
-      nameKz: 'Тамақ',
-      nameJa: '食べ物',
-      nameEn: 'Food',
-      cards: {
-        create: [
-          {
-            order: 1,
-            imageUrl: 'https://picsum.photos/seed/water/200',
-            textRu: 'Вода',
-            textKz: 'Су',
-            textJa: '水',
-            textEn: 'Water',
-          },
-          {
-            order: 2,
-            imageUrl: 'https://picsum.photos/seed/bread/200',
-            textRu: 'Хлеб',
-            textKz: 'Нан',
-            textJa: 'パン',
-            textEn: 'Bread',
-          },
-          {
-            order: 3,
-            imageUrl: 'https://picsum.photos/seed/apple/200',
-            textRu: 'Яблоко',
-            textKz: 'Алма',
-            textJa: 'りんご',
-            textEn: 'Apple',
-          },
-        ],
-      },
+      imageUrl: 'https://picsum.photos/seed/people-category/200',
+      nameEn: 'People',
+      nameRu: 'Люди',
+      nameKz: 'Адамдар',
+      nameJa: '人',
     },
-  });
-
-  const feelings = await prisma.aacCategory.create({
-    data: {
-      imageUrl: 'https://picsum.photos/seed/feelings-category/200',
+    {
       order: 2,
+      imageUrl: 'https://picsum.photos/seed/food-drinks-category/200',
+      nameEn: 'Food and drinks',
+      nameRu: 'Еда и напитки',
+      nameKz: 'Тамақ пен сусын',
+      nameJa: '食べ物と飲み物',
+    },
+    {
+      order: 3,
+      imageUrl: 'https://picsum.photos/seed/animals-category/200',
+      nameEn: 'Animals',
+      nameRu: 'Животные',
+      nameKz: 'Жануарлар',
+      nameJa: 'どうぶつ',
+    },
+    {
+      order: 4,
+      imageUrl: 'https://picsum.photos/seed/body-category/200',
+      nameEn: 'Body',
+      nameRu: 'Тело',
+      nameKz: 'Дене',
+      nameJa: 'からだ',
+    },
+    {
+      order: 5,
+      imageUrl: 'https://picsum.photos/seed/clothes-category/200',
+      nameEn: 'Clothes',
+      nameRu: 'Одежда',
+      nameKz: 'Киім',
+      nameJa: 'ふく',
+    },
+    {
+      order: 6,
+      imageUrl: 'https://picsum.photos/seed/toys-objects-category/200',
+      nameEn: 'Toys/objects',
+      nameRu: 'Игрушки/предметы',
+      nameKz: 'Ойыншықтар/заттар',
+      nameJa: 'おもちゃ・もの',
+    },
+    {
+      order: 7,
+      imageUrl: 'https://picsum.photos/seed/house-category/200',
+      nameEn: 'House',
+      nameRu: 'Дом',
+      nameKz: 'Үй',
+      nameJa: 'いえ',
+    },
+    {
+      order: 8,
+      imageUrl: 'https://picsum.photos/seed/place-category/200',
+      nameEn: 'Place/where',
+      nameRu: 'Место/куда',
+      nameKz: 'Орын/қайда',
+      nameJa: 'ばしょ・どこ',
+    },
+    {
+      order: 9,
+      imageUrl: 'https://picsum.photos/seed/actions-category/200',
+      nameEn: 'Actions',
+      nameRu: 'Действия',
+      nameKz: 'Әрекеттер',
+      nameJa: 'どうさ',
+    },
+    {
+      order: 10,
+      imageUrl: 'https://picsum.photos/seed/feelings-category/200',
+      nameEn: 'Feelings',
       nameRu: 'Чувства',
       nameKz: 'Сезімдер',
       nameJa: '気持ち',
-      nameEn: 'Feelings',
-      cards: {
-        create: [
-          {
-            order: 1,
-            imageUrl: 'https://picsum.photos/seed/happy/200',
-            textRu: 'Счастлив',
-            textKz: 'Бақытты',
-            textJa: '幸せ',
-            textEn: 'Happy',
-          },
-          {
-            order: 2,
-            imageUrl: 'https://picsum.photos/seed/sad/200',
-            textRu: 'Грустно',
-            textKz: 'Мұңды',
-            textJa: '悲しい',
-            textEn: 'Sad',
-          },
-          {
-            order: 3,
-            imageUrl: 'https://picsum.photos/seed/tired/200',
-            textRu: 'Устал',
-            textKz: 'Шаршадым',
-            textJa: '疲れた',
-            textEn: 'Tired',
-          },
-        ],
-      },
     },
-  });
+    {
+      order: 11,
+      imageUrl: 'https://picsum.photos/seed/weather-nature-category/200',
+      nameEn: 'Weather/nature',
+      nameRu: 'Погода/природа',
+      nameKz: 'Ауа-райы/табиғат',
+      nameJa: 'てんき・しぜん',
+    },
+    {
+      order: 12,
+      imageUrl: 'https://picsum.photos/seed/transport-category/200',
+      nameEn: 'Transport',
+      nameRu: 'Транспорт',
+      nameKz: 'Көлік',
+      nameJa: 'のりもの',
+    },
+    {
+      order: 13,
+      imageUrl: 'https://picsum.photos/seed/colors-category/200',
+      nameEn: 'Colors',
+      nameRu: 'Цвета',
+      nameKz: 'Түстер',
+      nameJa: 'いろ',
+    },
+    {
+      order: 14,
+      imageUrl: 'https://picsum.photos/seed/numbers-category/200',
+      nameEn: 'Numbers',
+      nameRu: 'Числа',
+      nameKz: 'Сандар',
+      nameJa: 'かず',
+    },
+    {
+      order: 15,
+      imageUrl: 'https://picsum.photos/seed/time-category/200',
+      nameEn: 'Time',
+      nameRu: 'Время',
+      nameKz: 'Уақыт',
+      nameJa: 'じかん',
+    },
+  ];
+
+  await prisma.aacCategory.createMany({ data: aacCategories });
 
   const articulation = await prisma.exerciseType.create({
     data: {
@@ -267,7 +314,10 @@ async function main() {
   });
 
   console.log('Seeded admin user:', admin.email);
-  console.log('Seeded AAC categories:', food.nameEn, feelings.nameEn);
+  console.log(
+    'Seeded AAC categories:',
+    aacCategories.map((category) => category.nameEn).join(', '),
+  );
   console.log('Seeded exercise types:', articulation.nameEn, breathing.nameEn);
   console.log('Seeded specialists:', anna.name, daniyar.name);
 }
