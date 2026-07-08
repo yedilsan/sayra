@@ -10,8 +10,8 @@ import {
 export class CreateAacCategoryDto {
   @IsString()
   @MinLength(1)
-  @MaxLength(50)
-  icon: string;
+  @MaxLength(255)
+  imageUrl: string;
 
   @IsOptional()
   @IsInt()

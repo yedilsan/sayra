@@ -27,7 +27,7 @@ async function main() {
 
   const food = await prisma.aacCategory.create({
     data: {
-      icon: 'food',
+      imageUrl: 'https://picsum.photos/seed/food-category/200',
       order: 1,
       nameRu: 'Еда',
       nameKz: 'Тамақ',
@@ -66,7 +66,7 @@ async function main() {
 
   const feelings = await prisma.aacCategory.create({
     data: {
-      icon: 'feelings',
+      imageUrl: 'https://picsum.photos/seed/feelings-category/200',
       order: 2,
       nameRu: 'Чувства',
       nameKz: 'Сезімдер',

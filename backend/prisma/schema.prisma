@@ -52,13 +52,13 @@ model Specialist {
 }
 
 model AacCategory {
-  id     String @id @default(uuid())
-  icon   String
-  order  Int    @default(0)
-  nameRu String
-  nameKz String
-  nameJa String
-  nameEn String
+  id       String @id @default(uuid())
+  imageUrl String
+  order    Int    @default(0)
+  nameRu   String
+  nameKz   String
+  nameJa   String
+  nameEn   String
 
   cards AacCard[]
 }
@@ -109,10 +109,10 @@ model Exercise {
   instructionJa   String
   instructionEn   String
   mediaUrl        String?
-  mediaType       MediaType @default(IMAGE)
+  mediaType       MediaType    @default(IMAGE)
   durationSeconds Int?
-  difficulty      Int       @default(1)
-  order           Int       @default(0)
+  difficulty      Int          @default(1)
+  order           Int          @default(0)
 
   sessions ExerciseSession[]
 }
