@@ -22,6 +22,13 @@ export class AacService {
     return this.prisma.aacCategory.findMany({ orderBy: { order: 'asc' } });
   }
 
+  findCoreCards() {
+    return this.prisma.aacCard.findMany({
+      where: { isCore: true },
+      orderBy: { order: 'asc' },
+    });
+  }
+
   async findCards(categoryId: string) {
     const category = await this.prisma.aacCategory.findUnique({
       where: { id: categoryId },

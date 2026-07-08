@@ -69,6 +69,7 @@ model AacCard {
   category   AacCategory @relation(fields: [categoryId], references: [id])
   imageUrl   String
   order      Int         @default(0)
+  isCore     Boolean     @default(false)
   textRu     String
   textKz     String
   textJa     String

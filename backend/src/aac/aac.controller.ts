@@ -29,6 +29,11 @@ export class AacController {
     return this.aacService.findCards(id);
   }
 
+  @Get('core-cards')
+  coreCards() {
+    return this.aacService.findCoreCards();
+  }
+
   @Post('tts')
   async tts(@Body() dto: TtsDto, @Res() res: Response) {
     const audioStream = await this.aacService.synthesizeSpeech(
