@@ -125,6 +125,7 @@ model Exercise {
   durationSeconds Int?
   difficulty      Int          @default(1)
   order           Int          @default(0)
+  optionImages    Json?
 
   sessions ExerciseSession[]
 }
