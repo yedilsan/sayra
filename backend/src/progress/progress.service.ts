@@ -1,21 +1,27 @@
 import { Injectable } from '@nestjs/common';
+import { ChildrenService } from '../children/children.service';
 import { PrismaService } from '../prisma/prisma.service';
 
 const SESSIONS_LIMIT = 50;
 
 @Injectable()
 export class ProgressService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly childrenService: ChildrenService,
+  ) {}
 
-  async getSummary(userId: string) {
+  async getSummary(userId: string, childId: string) {
+    await this.childrenService.findOwned(childId, userId);
+
     const [exerciseStats, pronunciationSessions] = await Promise.all([
       this.prisma.exerciseSession.aggregate({
-        where: { userId },
+        where: { childId },
         _count: { _all: true },
         _sum: { durationSeconds: true },
       }),
       this.prisma.pronunciationSession.findMany({
-        where: { userId },
+        where: { childId },
         select: { aiFeedback: true },
       }),
     ]);
@@ -38,16 +44,18 @@ export class ProgressService {
     };
   }
 
-  async getSessions(userId: string) {
+  async getSessions(userId: string, childId: string) {
+    await this.childrenService.findOwned(childId, userId);
+
     const [exerciseSessions, pronunciationSessions] = await Promise.all([
       this.prisma.exerciseSession.findMany({
-        where: { userId },
+        where: { childId },
         include: { exercise: true },
         orderBy: { completedAt: 'desc' },
         take: SESSIONS_LIMIT,
       }),
       this.prisma.pronunciationSession.findMany({
-        where: { userId },
+        where: { childId },
         orderBy: { createdAt: 'desc' },
         take: SESSIONS_LIMIT,
       }),

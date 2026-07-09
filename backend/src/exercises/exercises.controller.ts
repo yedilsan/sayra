@@ -41,6 +41,11 @@ export class ExercisesController {
     @Body() dto: CompleteExerciseDto,
     @CurrentUser() user: JwtPayload,
   ) {
-    return this.exercisesService.complete(user.userId, id, dto.durationSeconds);
+    return this.exercisesService.complete(
+      user.userId,
+      dto.childId,
+      id,
+      dto.durationSeconds,
+    );
   }
 }

@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import type { JwtPayload } from '../auth/types/jwt-payload.type';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
@@ -11,13 +11,19 @@ import { ProgressService } from './progress.service';
 export class ProgressController {
   constructor(private readonly progressService: ProgressService) {}
 
-  @Get('me')
-  getSummary(@CurrentUser() user: JwtPayload) {
-    return this.progressService.getSummary(user.userId);
+  @Get(':childId')
+  getSummary(
+    @Param('childId') childId: string,
+    @CurrentUser() user: JwtPayload,
+  ) {
+    return this.progressService.getSummary(user.userId, childId);
   }
 
-  @Get('me/sessions')
-  getSessions(@CurrentUser() user: JwtPayload) {
-    return this.progressService.getSessions(user.userId);
+  @Get(':childId/sessions')
+  getSessions(
+    @Param('childId') childId: string,
+    @CurrentUser() user: JwtPayload,
+  ) {
+    return this.progressService.getSessions(user.userId, childId);
   }
 }

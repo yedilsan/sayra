@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { Lang } from '@prisma/client';
 import Anthropic from '@anthropic-ai/sdk';
 import OpenAI, { toFile } from 'openai';
+import { ChildrenService } from '../children/children.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { AnalyzePronunciationDto } from './dto/analyze-pronunciation.dto';
 
@@ -27,6 +28,7 @@ export class PronunciationService {
 
   constructor(
     private readonly prisma: PrismaService,
+    private readonly childrenService: ChildrenService,
     configService: ConfigService,
   ) {
     this.openai = new OpenAI({
@@ -42,12 +44,13 @@ export class PronunciationService {
     audio: Express.Multer.File,
     dto: AnalyzePronunciationDto,
   ) {
+    await this.childrenService.findOwned(dto.childId, userId);
     const transcript = await this.transcribe(audio, dto.language);
     const feedback = await this.compare(dto.targetWord, transcript, dto.language);
 
     return this.prisma.pronunciationSession.create({
       data: {
-        userId,
+        childId: dto.childId,
         targetWord: dto.targetWord,
         targetLang: dto.language,
         transcript,

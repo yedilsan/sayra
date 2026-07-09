@@ -6,6 +6,7 @@ import { AiModule } from './ai/ai.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
+import { ChildrenModule } from './children/children.module';
 import { ExercisesModule } from './exercises/exercises.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ProgressModule } from './progress/progress.module';
@@ -19,6 +20,7 @@ import { UsersModule } from './users/users.module';
     PrismaModule,
     UsersModule,
     AuthModule,
+    ChildrenModule,
     AacModule,
     ExercisesModule,
     PronunciationModule,

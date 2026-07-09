@@ -3,6 +3,10 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsString, MaxLength, MinLength } from 'class-validator';
 
 export class AnalyzePronunciationDto {
+  @ApiProperty({ description: 'The child attempting the pronunciation' })
+  @IsString()
+  childId: string;
+
   @ApiProperty({ description: 'The word the user is attempting to pronounce', example: 'hello' })
   @IsString()
   @MinLength(1)

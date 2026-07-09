@@ -21,9 +21,21 @@ model User {
   language         Lang     @default(RU)
   createdAt        DateTime @default(now())
 
+  children              Child[]
+  chatMessages          ChatMessage[]
+}
+
+model Child {
+  id        String   @id @default(uuid())
+  parentId  String
+  parent    User     @relation(fields: [parentId], references: [id])
+  name      String
+  age       Int
+  avatarUrl String?
+  createdAt DateTime @default(now())
+
   exerciseSessions      ExerciseSession[]
   pronunciationSessions PronunciationSession[]
-  chatMessages          ChatMessage[]
 }
 
 enum Role {
@@ -125,8 +137,8 @@ enum MediaType {
 
 model ExerciseSession {
   id              String   @id @default(uuid())
-  userId          String
-  user            User     @relation(fields: [userId], references: [id])
+  childId         String
+  child           Child    @relation(fields: [childId], references: [id], onDelete: Cascade)
   exerciseId      String
   exercise        Exercise @relation(fields: [exerciseId], references: [id])
   completedAt     DateTime @default(now())
@@ -135,8 +147,8 @@ model ExerciseSession {
 
 model PronunciationSession {
   id         String   @id @default(uuid())
-  userId     String
-  user       User     @relation(fields: [userId], references: [id])
+  childId    String
+  child      Child    @relation(fields: [childId], references: [id], onDelete: Cascade)
   targetWord String
   targetLang Lang
   audioUrl   String?
