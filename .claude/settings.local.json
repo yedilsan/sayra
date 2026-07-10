@@ -10,7 +10,10 @@
       "Bash(npx prisma *)",
       "Bash(npx ts-node *)",
       "Bash(npm run *)",
-      "Bash(echo \"started with pid $!\")"
+      "Bash(echo \"started with pid $!\")",
+      "Bash(node -e \"console.log\\(JSON.parse\\(require\\('fs'\\).readFileSync\\('/tmp/login.json','utf8'\\)\\).accessToken\\)\")",
+      "Bash(curl -s http://localhost:3000/aac/categories -H 'Authorization: Bearer __CMDSUB_OUTPUT__')",
+      "Bash(node -e ' *)"
     ]
   }
 }

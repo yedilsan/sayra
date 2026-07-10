@@ -3,6 +3,14 @@ import * as argon2 from 'argon2';
 
 const prisma = new PrismaClient();
 
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+}
+
 async function main() {
   const adminPasswordHash = await argon2.hash('admin123', {
     type: argon2.argon2id,
@@ -19,7 +27,6 @@ async function main() {
   });
 
   await prisma.aacCard.deleteMany();
-  await prisma.aacCategory.deleteMany();
   await prisma.exerciseSession.deleteMany();
   await prisma.exercise.deleteMany();
   await prisma.exerciseType.deleteMany();
@@ -148,7 +155,230 @@ async function main() {
     },
   ];
 
-  await prisma.aacCategory.createMany({ data: aacCategories });
+  const categoriesByName: Record<string, { id: string }> = {};
+  for (const categoryData of aacCategories) {
+    const existing = await prisma.aacCategory.findFirst({
+      where: { nameEn: categoryData.nameEn },
+    });
+    categoriesByName[categoryData.nameEn] =
+      existing ?? (await prisma.aacCategory.create({ data: categoryData }));
+  }
+
+  const aacCardsByCategory: Record<
+    string,
+    Array<{
+      textRu: string;
+      textKz: string;
+      textJa: string;
+      textEn: string;
+      isCore: boolean;
+    }>
+  > = {
+    People: [
+      { textRu: 'Мама', textKz: 'Ана', textJa: 'ママ', textEn: 'Mom', isCore: false },
+      { textRu: 'Папа', textKz: 'Әке', textJa: 'パパ', textEn: 'Dad', isCore: false },
+      { textRu: 'Бабушка', textKz: 'Әже', textJa: 'おばあちゃん', textEn: 'Grandma', isCore: false },
+      { textRu: 'Дедушка', textKz: 'Ата', textJa: 'おじいちゃん', textEn: 'Grandpa', isCore: false },
+      { textRu: 'Брат', textKz: 'Аға/Іні', textJa: '兄弟', textEn: 'Brother', isCore: false },
+      { textRu: 'Сестра', textKz: 'Апа/Қарындас', textJa: '姉妹', textEn: 'Sister', isCore: false },
+      { textRu: 'Друг', textKz: 'Дос', textJa: '友達', textEn: 'Friend', isCore: false },
+      { textRu: 'Воспитатель', textKz: 'Тәрбиеші', textJa: '先生', textEn: 'Teacher', isCore: false },
+      { textRu: 'Врач', textKz: 'Дәрігер', textJa: 'お医者さん', textEn: 'Doctor', isCore: false },
+      { textRu: 'Я', textKz: 'Мен', textJa: 'わたし', textEn: 'I', isCore: true },
+      { textRu: 'Ты', textKz: 'Сен', textJa: 'あなた', textEn: 'You', isCore: true },
+      { textRu: 'Он/Она', textKz: 'Ол', textJa: '彼/彼女', textEn: 'He/She', isCore: true },
+      { textRu: 'Мы', textKz: 'Біз', textJa: 'わたしたち', textEn: 'We', isCore: true },
+      { textRu: 'Кто', textKz: 'Кім', textJa: 'だれ', textEn: 'Who', isCore: true },
+      { textRu: 'Привет', textKz: 'Сәлем', textJa: 'こんにちは', textEn: 'Hi', isCore: true },
+      { textRu: 'Пока', textKz: 'Сау бол', textJa: 'バイバイ', textEn: 'Bye', isCore: true },
+      { textRu: 'Спасибо', textKz: 'Рахмет', textJa: 'ありがとう', textEn: 'Thank you', isCore: true },
+      { textRu: 'Пожалуйста', textKz: 'Өтінемін', textJa: 'おねがいします', textEn: 'Please', isCore: true },
+      { textRu: 'Извини', textKz: 'Кешір', textJa: 'ごめんね', textEn: 'Sorry', isCore: true },
+    ],
+    'Food and drinks': [
+      { textRu: 'Вода', textKz: 'Су', textJa: 'みず', textEn: 'Water', isCore: false },
+      { textRu: 'Молоко', textKz: 'Сүт', textJa: 'ぎゅうにゅう', textEn: 'Milk', isCore: false },
+      { textRu: 'Сок', textKz: 'Шырын', textJa: 'ジュース', textEn: 'Juice', isCore: false },
+      { textRu: 'Хлеб', textKz: 'Нан', textJa: 'パン', textEn: 'Bread', isCore: false },
+      { textRu: 'Яблоко', textKz: 'Алма', textJa: 'りんご', textEn: 'Apple', isCore: false },
+      { textRu: 'Банан', textKz: 'Банан', textJa: 'バナナ', textEn: 'Banana', isCore: false },
+      { textRu: 'Суп', textKz: 'Көже/Сорпа', textJa: 'スープ', textEn: 'Soup', isCore: false },
+      { textRu: 'Каша', textKz: 'Ботқа', textJa: 'おかゆ', textEn: 'Porridge', isCore: false },
+      { textRu: 'Печенье', textKz: 'Печенье', textJa: 'クッキー', textEn: 'Cookie', isCore: false },
+      { textRu: 'Конфета', textKz: 'Кәмпит', textJa: 'あめ', textEn: 'Candy', isCore: false },
+      { textRu: 'Сыр', textKz: 'Ірімшік', textJa: 'チーズ', textEn: 'Cheese', isCore: false },
+      { textRu: 'Есть', textKz: 'Жеу', textJa: 'たべる', textEn: 'Eat', isCore: true },
+      { textRu: 'Пить', textKz: 'Ішу', textJa: 'のむ', textEn: 'Drink', isCore: true },
+    ],
+    Animals: [
+      { textRu: 'Кошка', textKz: 'Мысық', textJa: 'ねこ', textEn: 'Cat', isCore: false },
+      { textRu: 'Собака', textKz: 'Ит', textJa: 'いぬ', textEn: 'Dog', isCore: false },
+      { textRu: 'Птица', textKz: 'Құс', textJa: 'とり', textEn: 'Bird', isCore: false },
+      { textRu: 'Рыба', textKz: 'Балық', textJa: 'さかな', textEn: 'Fish', isCore: false },
+      { textRu: 'Лошадь', textKz: 'Ат', textJa: 'うま', textEn: 'Horse', isCore: false },
+      { textRu: 'Корова', textKz: 'Сиыр', textJa: 'うし', textEn: 'Cow', isCore: false },
+      { textRu: 'Заяц', textKz: 'Қоян', textJa: 'うさぎ', textEn: 'Rabbit', isCore: false },
+      { textRu: 'Медведь', textKz: 'Аю', textJa: 'くま', textEn: 'Bear', isCore: false },
+    ],
+    Body: [
+      { textRu: 'Голова', textKz: 'Бас', textJa: 'あたま', textEn: 'Head', isCore: false },
+      { textRu: 'Живот', textKz: 'Іш', textJa: 'おなか', textEn: 'Tummy', isCore: false },
+      { textRu: 'Рука', textKz: 'Қол', textJa: 'て', textEn: 'Hand', isCore: false },
+      { textRu: 'Нога', textKz: 'Аяқ', textJa: 'あし', textEn: 'Foot', isCore: false },
+      { textRu: 'Глаза', textKz: 'Көз', textJa: 'め', textEn: 'Eyes', isCore: false },
+      { textRu: 'Уши', textKz: 'Құлақ', textJa: 'みみ', textEn: 'Ears', isCore: false },
+      { textRu: 'Зубы', textKz: 'Тіс', textJa: 'は', textEn: 'Teeth', isCore: false },
+      { textRu: 'Нос', textKz: 'Мұрын', textJa: 'はな', textEn: 'Nose', isCore: false },
+      { textRu: 'Рот', textKz: 'Ауыз', textJa: 'くち', textEn: 'Mouth', isCore: false },
+      { textRu: 'Больно', textKz: 'Ауырады', textJa: 'いたい', textEn: 'Hurts', isCore: true },
+    ],
+    Clothes: [
+      { textRu: 'Куртка', textKz: 'Күртеше', textJa: 'ジャケット', textEn: 'Jacket', isCore: false },
+      { textRu: 'Шапка', textKz: 'Бөрік/Тақия', textJa: 'ぼうし', textEn: 'Hat', isCore: false },
+      { textRu: 'Штаны', textKz: 'Шалбар', textJa: 'ズボン', textEn: 'Pants', isCore: false },
+      { textRu: 'Обувь', textKz: 'Аяқ киім', textJa: 'くつ', textEn: 'Shoes', isCore: false },
+      { textRu: 'Носки', textKz: 'Шұлық', textJa: 'くつした', textEn: 'Socks', isCore: false },
+      { textRu: 'Платье', textKz: 'Көйлек', textJa: 'ワンピース', textEn: 'Dress', isCore: false },
+    ],
+    'Toys/objects': [
+      { textRu: 'Мяч', textKz: 'Доп', textJa: 'ボール', textEn: 'Ball', isCore: false },
+      { textRu: 'Кукла', textKz: 'Қуыршақ', textJa: 'にんぎょう', textEn: 'Doll', isCore: false },
+      { textRu: 'Машинка', textKz: 'Көлікше', textJa: 'くるま(おもちゃ)', textEn: 'Toy car', isCore: false },
+      { textRu: 'Книга', textKz: 'Кітап', textJa: 'ほん', textEn: 'Book', isCore: false },
+      { textRu: 'Карандаш', textKz: 'Қарындаш', textJa: 'えんぴつ', textEn: 'Pencil', isCore: false },
+      { textRu: 'Телефон', textKz: 'Телефон', textJa: 'でんわ', textEn: 'Phone', isCore: false },
+      { textRu: 'Кубики', textKz: 'Текшелер', textJa: 'つみき', textEn: 'Blocks', isCore: false },
+      { textRu: 'Играть', textKz: 'Ойнау', textJa: 'あそぶ', textEn: 'Play', isCore: true },
+      { textRu: 'Это', textKz: 'Бұл', textJa: 'これ', textEn: 'This', isCore: true },
+      { textRu: 'Мой', textKz: 'Менің', textJa: 'わたしの', textEn: 'Mine', isCore: true },
+      { textRu: 'Твой', textKz: 'Сенің', textJa: 'あなたの', textEn: 'Yours', isCore: true },
+      { textRu: 'Другой', textKz: 'Басқа', textJa: 'ほかの', textEn: 'Other', isCore: true },
+    ],
+    House: [
+      { textRu: 'Кровать', textKz: 'Төсек', textJa: 'ベッド', textEn: 'Bed', isCore: false },
+      { textRu: 'Стол', textKz: 'Үстел', textJa: 'つくえ', textEn: 'Table', isCore: false },
+      { textRu: 'Стул', textKz: 'Орындық', textJa: 'いす', textEn: 'Chair', isCore: false },
+      { textRu: 'Дверь', textKz: 'Есік', textJa: 'ドア', textEn: 'Door', isCore: false },
+      { textRu: 'Окно', textKz: 'Терезе', textJa: 'まど', textEn: 'Window', isCore: false },
+      { textRu: 'Туалет', textKz: 'Дәретхана', textJa: 'トイレ', textEn: 'Toilet', isCore: false },
+      { textRu: 'Ванна', textKz: 'Ванна', textJa: 'おふろ', textEn: 'Bath', isCore: false },
+      { textRu: 'Кухня', textKz: 'Асхана', textJa: 'だいどころ', textEn: 'Kitchen', isCore: false },
+      { textRu: 'Спать', textKz: 'Ұйықтау', textJa: 'ねる', textEn: 'Sleep', isCore: true },
+      { textRu: 'Сидеть', textKz: 'Отыру', textJa: 'すわる', textEn: 'Sit', isCore: true },
+      { textRu: 'Вставать', textKz: 'Тұру', textJa: 'たつ', textEn: 'Stand up', isCore: true },
+      { textRu: 'Открыть', textKz: 'Ашу', textJa: 'あける', textEn: 'Open', isCore: true },
+    ],
+    'Place/where': [
+      { textRu: 'Дом', textKz: 'Үй', textJa: 'いえ', textEn: 'Home', isCore: false },
+      { textRu: 'Садик', textKz: 'Балабақша', textJa: 'ようちえん', textEn: 'Kindergarten', isCore: false },
+      { textRu: 'Улица', textKz: 'Көше', textJa: 'みち', textEn: 'Street', isCore: false },
+      { textRu: 'Магазин', textKz: 'Дүкен', textJa: 'おみせ', textEn: 'Shop', isCore: false },
+      { textRu: 'Парк', textKz: 'Саябақ', textJa: 'こうえん', textEn: 'Park', isCore: false },
+      { textRu: 'Больница', textKz: 'Аурухана', textJa: 'びょういん', textEn: 'Hospital', isCore: false },
+      { textRu: 'Идти', textKz: 'Жүру/Бару', textJa: 'いく', textEn: 'Go', isCore: true },
+      { textRu: 'Где', textKz: 'Қайда', textJa: 'どこ', textEn: 'Where', isCore: true },
+      { textRu: 'Там', textKz: 'Онда', textJa: 'あそこ', textEn: 'There', isCore: true },
+      { textRu: 'Тут', textKz: 'Мұнда', textJa: 'ここ', textEn: 'Here', isCore: true },
+    ],
+    Actions: [
+      { textRu: 'Мыть', textKz: 'Жуу', textJa: 'あらう', textEn: 'Wash', isCore: false },
+      { textRu: 'Одеваться', textKz: 'Киіну', textJa: 'きがえる', textEn: 'Get dressed', isCore: false },
+      { textRu: 'Читать', textKz: 'Оқу', textJa: 'よむ', textEn: 'Read', isCore: false },
+      { textRu: 'Рисовать', textKz: 'Сурет салу', textJa: 'かく', textEn: 'Draw', isCore: false },
+      { textRu: 'Петь', textKz: 'Ән айту', textJa: 'うたう', textEn: 'Sing', isCore: false },
+      { textRu: 'Бежать', textKz: 'Жүгіру', textJa: 'はしる', textEn: 'Run', isCore: false },
+      { textRu: 'Прыгать', textKz: 'Секіру', textJa: 'とぶ', textEn: 'Jump', isCore: false },
+      { textRu: 'Падать', textKz: 'Құлау', textJa: 'おちる', textEn: 'Fall', isCore: false },
+      { textRu: 'Чистить зубы', textKz: 'Тіс тазалау', textJa: 'はをみがく', textEn: 'Brush teeth', isCore: false },
+      { textRu: 'Хочу', textKz: 'Қалаймын', textJa: 'ほしい', textEn: 'Want', isCore: true },
+      { textRu: 'Дай', textKz: 'Бер', textJa: 'ちょうだい', textEn: 'Give', isCore: true },
+      { textRu: 'Ещё', textKz: 'Тағы', textJa: 'もっと', textEn: 'More', isCore: true },
+      { textRu: 'Нет', textKz: 'Жоқ', textJa: 'いいえ', textEn: 'No', isCore: true },
+      { textRu: 'Да', textKz: 'Иә', textJa: 'はい', textEn: 'Yes', isCore: true },
+      { textRu: 'Стоп', textKz: 'Тоқта', textJa: 'ストップ', textEn: 'Stop', isCore: true },
+      { textRu: 'Помоги', textKz: 'Көмектес', textJa: 'たすけて', textEn: 'Help', isCore: true },
+      { textRu: 'Всё', textKz: 'Бәрі/Болды', textJa: 'おわり', textEn: 'All done', isCore: true },
+      { textRu: 'Смотреть', textKz: 'Қарау', textJa: 'みる', textEn: 'Look', isCore: true },
+      { textRu: 'Слушать', textKz: 'Тыңдау', textJa: 'きく', textEn: 'Listen', isCore: true },
+      { textRu: 'Делать', textKz: 'Істеу', textJa: 'する', textEn: 'Do', isCore: true },
+      { textRu: 'Любить', textKz: 'Жақсы көру', textJa: 'すき', textEn: 'Love', isCore: true },
+      { textRu: 'Что', textKz: 'Не', textJa: 'なに', textEn: 'What', isCore: true },
+      { textRu: 'Почему', textKz: 'Неге', textJa: 'なぜ', textEn: 'Why', isCore: true },
+      { textRu: 'Как', textKz: 'Қалай', textJa: 'どうやって', textEn: 'How', isCore: true },
+      { textRu: 'Можно', textKz: 'Болады', textJa: 'いいよ', textEn: 'Can/May', isCore: true },
+      { textRu: 'Нельзя', textKz: 'Болмайды', textJa: 'だめ', textEn: 'Cannot', isCore: true },
+    ],
+    Feelings: [
+      { textRu: 'Весело', textKz: 'Көңілді', textJa: 'たのしい', textEn: 'Fun', isCore: false },
+      { textRu: 'Скучно', textKz: 'Жалықты', textJa: 'つまらない', textEn: 'Bored', isCore: false },
+      { textRu: 'Страшно', textKz: 'Қорқынышты', textJa: 'こわい', textEn: 'Scared', isCore: false },
+      { textRu: 'Тепло', textKz: 'Жылы', textJa: 'あたたかい', textEn: 'Warm', isCore: false },
+      { textRu: 'Холодно', textKz: 'Суық', textJa: 'さむい', textEn: 'Cold', isCore: false },
+      { textRu: 'Устал', textKz: 'Шаршадым', textJa: 'つかれた', textEn: 'Tired', isCore: true },
+      { textRu: 'Голоден', textKz: 'Ашықтым', textJa: 'おなかすいた', textEn: 'Hungry', isCore: true },
+      { textRu: 'Хочу пить', textKz: 'Су ішкім келеді', textJa: 'のどがかわいた', textEn: 'Thirsty', isCore: true },
+      { textRu: 'Радость', textKz: 'Қуаныш', textJa: 'うれしい', textEn: 'Joy', isCore: true },
+      { textRu: 'Грусть', textKz: 'Мұң', textJa: 'かなしい', textEn: 'Sadness', isCore: true },
+      { textRu: 'Злость', textKz: 'Ашу', textJa: 'おこった', textEn: 'Anger', isCore: true },
+    ],
+    'Weather/nature': [
+      { textRu: 'Солнце', textKz: 'Күн', textJa: 'たいよう', textEn: 'Sun', isCore: false },
+      { textRu: 'Дождь', textKz: 'Жаңбыр', textJa: 'あめ', textEn: 'Rain', isCore: false },
+      { textRu: 'Снег', textKz: 'Қар', textJa: 'ゆき', textEn: 'Snow', isCore: false },
+      { textRu: 'Ветер', textKz: 'Жел', textJa: 'かぜ', textEn: 'Wind', isCore: false },
+      { textRu: 'Небо', textKz: 'Аспан', textJa: 'そら', textEn: 'Sky', isCore: false },
+      { textRu: 'Дерево', textKz: 'Ағаш', textJa: 'き', textEn: 'Tree', isCore: false },
+      { textRu: 'Цветок', textKz: 'Гүл', textJa: 'はな', textEn: 'Flower', isCore: false },
+    ],
+    Transport: [
+      { textRu: 'Машина', textKz: 'Көлік', textJa: 'くるま', textEn: 'Car', isCore: false },
+      { textRu: 'Автобус', textKz: 'Автобус', textJa: 'バス', textEn: 'Bus', isCore: false },
+      { textRu: 'Самолёт', textKz: 'Ұшақ', textJa: 'ひこうき', textEn: 'Airplane', isCore: false },
+      { textRu: 'Поезд', textKz: 'Пойыз', textJa: 'でんしゃ', textEn: 'Train', isCore: false },
+      { textRu: 'Велосипед', textKz: 'Велосипед', textJa: 'じてんしゃ', textEn: 'Bicycle', isCore: false },
+    ],
+    Colors: [
+      { textRu: 'Красный', textKz: 'Қызыл', textJa: 'あか', textEn: 'Red', isCore: false },
+      { textRu: 'Синий', textKz: 'Көк', textJa: 'あお', textEn: 'Blue', isCore: false },
+      { textRu: 'Жёлтый', textKz: 'Сары', textJa: 'きいろ', textEn: 'Yellow', isCore: false },
+      { textRu: 'Зелёный', textKz: 'Жасыл', textJa: 'みどり', textEn: 'Green', isCore: false },
+      { textRu: 'Чёрный', textKz: 'Қара', textJa: 'くろ', textEn: 'Black', isCore: false },
+      { textRu: 'Белый', textKz: 'Ақ', textJa: 'しろ', textEn: 'White', isCore: false },
+    ],
+    Numbers: [
+      { textRu: 'Один', textKz: 'Бір', textJa: 'いち', textEn: 'One', isCore: false },
+      { textRu: 'Два', textKz: 'Екі', textJa: 'に', textEn: 'Two', isCore: false },
+      { textRu: 'Три', textKz: 'Үш', textJa: 'さん', textEn: 'Three', isCore: false },
+      { textRu: 'Много', textKz: 'Көп', textJa: 'おおい', textEn: 'Many', isCore: false },
+      { textRu: 'Мало', textKz: 'Аз', textJa: 'すくない', textEn: 'Few', isCore: false },
+    ],
+    Time: [
+      { textRu: 'Сейчас', textKz: 'Қазір', textJa: 'いま', textEn: 'Now', isCore: false },
+      { textRu: 'Потом', textKz: 'Кейін', textJa: 'あとで', textEn: 'Later', isCore: false },
+      { textRu: 'Утро', textKz: 'Таң', textJa: 'あさ', textEn: 'Morning', isCore: false },
+      { textRu: 'День', textKz: 'Күн', textJa: 'ひる', textEn: 'Day', isCore: false },
+      { textRu: 'Ночь', textKz: 'Түн', textJa: 'よる', textEn: 'Night', isCore: false },
+      { textRu: 'Сегодня', textKz: 'Бүгін', textJa: 'きょう', textEn: 'Today', isCore: false },
+      { textRu: 'Завтра', textKz: 'Ертең', textJa: 'あした', textEn: 'Tomorrow', isCore: false },
+      { textRu: 'Когда', textKz: 'Қашан', textJa: 'いつ', textEn: 'When', isCore: true },
+    ],
+  };
+
+  for (const [categoryName, cards] of Object.entries(aacCardsByCategory)) {
+    const category = categoriesByName[categoryName];
+    await prisma.aacCard.createMany({
+      data: cards.map((card, index) => ({
+        categoryId: category.id,
+        order: index + 1,
+        imageUrl: `https://picsum.photos/seed/${slugify(card.textEn)}/200`,
+        isCore: card.isCore,
+        textRu: card.textRu,
+        textKz: card.textKz,
+        textJa: card.textJa,
+        textEn: card.textEn,
+      })),
+    });
+  }
 
   // ─────────────────────────────────────────────────────────
   // 1. Articulation
