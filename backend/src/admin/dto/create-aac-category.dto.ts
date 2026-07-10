@@ -18,23 +18,27 @@ export class CreateAacCategoryDto {
   @Min(0)
   order?: number;
 
+  @IsOptional()
   @IsString()
   @MinLength(1)
   @MaxLength(255)
-  nameRu: string;
+  nameRu?: string;
 
+  @IsOptional()
   @IsString()
   @MinLength(1)
   @MaxLength(255)
-  nameKz: string;
+  nameKz?: string;
 
+  @IsOptional()
   @IsString()
   @MinLength(1)
   @MaxLength(255)
-  nameJa: string;
+  nameJa?: string;
 
+  @IsOptional()
   @IsString()
   @MinLength(1)
   @MaxLength(255)
-  nameEn: string;
+  nameEn?: string;
 }

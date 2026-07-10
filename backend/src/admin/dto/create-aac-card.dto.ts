@@ -21,23 +21,27 @@ export class CreateAacCardDto {
   @Min(0)
   order?: number;
 
+  @IsOptional()
   @IsString()
   @MinLength(1)
   @MaxLength(255)
-  textRu: string;
+  textRu?: string;
 
+  @IsOptional()
   @IsString()
   @MinLength(1)
   @MaxLength(255)
-  textKz: string;
+  textKz?: string;
 
+  @IsOptional()
   @IsString()
   @MinLength(1)
   @MaxLength(255)
-  textJa: string;
+  textJa?: string;
 
+  @IsOptional()
   @IsString()
   @MinLength(1)
   @MaxLength(255)
-  textEn: string;
+  textEn?: string;
 }

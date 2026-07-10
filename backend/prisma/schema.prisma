@@ -64,13 +64,13 @@ model Specialist {
 }
 
 model AacCategory {
-  id       String @id @default(uuid())
+  id       String  @id @default(uuid())
   imageUrl String
-  order    Int    @default(0)
-  nameRu   String
-  nameKz   String
-  nameJa   String
-  nameEn   String
+  order    Int     @default(0)
+  nameRu   String?
+  nameKz   String?
+  nameJa   String?
+  nameEn   String?
 
   cards AacCard[]
 }
@@ -82,24 +82,24 @@ model AacCard {
   imageUrl   String
   order      Int         @default(0)
   isCore     Boolean     @default(false)
-  textRu     String
-  textKz     String
-  textJa     String
-  textEn     String
+  textRu     String?
+  textKz     String?
+  textJa     String?
+  textEn     String?
 }
 
 model ExerciseType {
-  id            String @id @default(uuid())
-  slug          String @unique
+  id            String  @id @default(uuid())
+  slug          String  @unique
   icon          String
-  nameRu        String
-  nameKz        String
-  nameJa        String
-  nameEn        String
-  descriptionRu String
-  descriptionKz String
-  descriptionJa String
-  descriptionEn String
+  nameRu        String?
+  nameKz        String?
+  nameJa        String?
+  nameEn        String?
+  descriptionRu String?
+  descriptionKz String?
+  descriptionJa String?
+  descriptionEn String?
 
   exercises Exercise[]
 }
@@ -108,18 +108,18 @@ model Exercise {
   id              String       @id @default(uuid())
   typeId          String
   type            ExerciseType @relation(fields: [typeId], references: [id])
-  titleRu         String
-  titleKz         String
-  titleJa         String
-  titleEn         String
-  descriptionRu   String
-  descriptionKz   String
-  descriptionJa   String
-  descriptionEn   String
-  instructionRu   String
-  instructionKz   String
-  instructionJa   String
-  instructionEn   String
+  titleRu         String?
+  titleKz         String?
+  titleJa         String?
+  titleEn         String?
+  descriptionRu   String?
+  descriptionKz   String?
+  descriptionJa   String?
+  descriptionEn   String?
+  instructionRu   String?
+  instructionKz   String?
+  instructionJa   String?
+  instructionEn   String?
   mediaUrl        String?
   mediaType       MediaType    @default(IMAGE)
   durationSeconds Int?

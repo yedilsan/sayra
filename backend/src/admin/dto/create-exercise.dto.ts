@@ -15,57 +15,69 @@ export class CreateExerciseDto {
   @IsUUID()
   typeId: string;
 
+  @IsOptional()
   @IsString()
   @MinLength(1)
   @MaxLength(255)
-  titleRu: string;
+  titleRu?: string;
 
+  @IsOptional()
   @IsString()
   @MinLength(1)
   @MaxLength(255)
-  titleKz: string;
+  titleKz?: string;
 
+  @IsOptional()
   @IsString()
   @MinLength(1)
   @MaxLength(255)
-  titleJa: string;
+  titleJa?: string;
 
+  @IsOptional()
   @IsString()
   @MinLength(1)
   @MaxLength(255)
-  titleEn: string;
+  titleEn?: string;
 
+  @IsOptional()
   @IsString()
   @MinLength(1)
-  descriptionRu: string;
+  descriptionRu?: string;
 
+  @IsOptional()
   @IsString()
   @MinLength(1)
-  descriptionKz: string;
+  descriptionKz?: string;
 
+  @IsOptional()
   @IsString()
   @MinLength(1)
-  descriptionJa: string;
+  descriptionJa?: string;
 
+  @IsOptional()
   @IsString()
   @MinLength(1)
-  descriptionEn: string;
+  descriptionEn?: string;
 
+  @IsOptional()
   @IsString()
   @MinLength(1)
-  instructionRu: string;
+  instructionRu?: string;
 
+  @IsOptional()
   @IsString()
   @MinLength(1)
-  instructionKz: string;
+  instructionKz?: string;
 
+  @IsOptional()
   @IsString()
   @MinLength(1)
-  instructionJa: string;
+  instructionJa?: string;
 
+  @IsOptional()
   @IsString()
   @MinLength(1)
-  instructionEn: string;
+  instructionEn?: string;
 
   @IsOptional()
   @IsUrl()
