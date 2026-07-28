@@ -1,0 +1,137 @@
+{
+  "common": {
+    "loading": "Жүктелуде...",
+    "retry": "Қайталау",
+    "save": "Сақтау",
+    "cancel": "Бас тарту",
+    "continue": "Жалғастыру",
+    "back": "Артқа",
+    "somethingWentWrong": "Бірдеңе дұрыс болмады.",
+    "error": "Қате"
+  },
+  "app": {
+    "name": "Say Ra",
+    "tagline": "Көптілді логопедия — ойын түрінде"
+  },
+  "tabs": {
+    "aac": "AAC",
+    "exercises": "Жаттығулар",
+    "pronunciation": "Сөйлеу",
+    "therapists": "Мамандар",
+    "profile": "Профиль"
+  },
+  "auth": {
+    "logIn": "Кіру",
+    "signUp": "Тіркелу",
+    "parentName": "Ата-ана аты",
+    "email": "Электрондық пошта",
+    "password": "Құпия сөз",
+    "submitLogIn": "Кіру",
+    "submitSignUp": "Аккаунт жасау",
+    "errorFillFields": "Барлық өрістерді толтырыңыз.",
+    "errorInvalidCredentials": "Email немесе құпия сөз қате.",
+    "errorEmailInUse": "Бұл email бұрыннан тіркелген.",
+    "noAccountPrompt": "Аккаунтыңыз жоқ па?",
+    "hasAccountPrompt": "Аккаунтыңыз бар ма?",
+    "errorEmailRequired": "Электрондық поштаны енгізіңіз.",
+    "errorEmailInvalid": "Жарамды электрондық пошта мекенжайын енгізіңіз.",
+    "errorPasswordRequired": "Құпия сөзді енгізіңіз.",
+    "errorPasswordShort": "Құпия сөз кемінде 8 таңбадан тұруы керек",
+    "errorNameRequired": "Атыңызды енгізіңіз.",
+    "errorEmailRegistered": "Бұл email тіркелген. Кіріп көріңіз.",
+    "errorIncorrect": "Email немесе құпия сөз қате",
+    "errorNetwork": "Бірдеңе дұрыс болмады. Байланысты тексеріп, қайталаңыз."
+  },
+  "onboarding": {
+    "addChildTitle": "Балаңызды қосыңыз",
+    "addChildSubtitle": "бастамас бұрын бір қадам",
+    "namePlaceholder": "Баланың аты",
+    "age": "Жасы",
+    "errorMissingFields": "Атын және жасын көрсетіңіз.",
+    "whoIsPracticingTitle": "Кім жаттығады?",
+    "whoIsPracticingSubtitle": "жалғастыру үшін баланы таңдаңыз",
+    "addAnotherChild": "+ Тағы бала қосу",
+    "ageLabel": "Жасы {{age}}"
+  },
+  "ai": {
+    "greeting": "Сәлем, мен Ра 👋",
+    "intro": "Бүгінгі сабақ, балаңыз жаттығып жатқан дыбыс немесе қосымшаны пайдалану туралы сұраңыз.",
+    "placeholder": "Радан сұрау..."
+  },
+  "childSwitch": {
+    "title": "Баланы ауыстыру",
+    "active": "Белсенді",
+    "switch": "Таңдау"
+  },
+  "aac": {
+    "title": "AAC тақтасы",
+    "subtitle": "сөйлем құру үшін плиткаларды түртіңіз",
+    "placeholder": "сөйлемді айту үшін плиткаларды түртіңіз...",
+    "speakLabel": "сөйлемді айту"
+  },
+  "exercises": {
+    "title": "Жаттығулар",
+    "subtitle": "жаттығу үшін бөлімді таңдаңыз",
+    "exerciseCount": "{{count}} жаттығу",
+    "pointToThe": "көрсет",
+    "quizProgress": "{{total}} сөзден {{current}}",
+    "correct": "★ Тамаша!",
+    "incorrect": "Тағы байқап көр!",
+    "quizCompleteTitle": "Жарайсың! Барлық сөзді аяқтадың!",
+    "quizCompleteScore": "{{total}} сөзден {{correct}} бірінші реттен дұрыс",
+    "tryAgain": "Қайталап көру",
+    "backToExercises": "Жаттығуларға оралу",
+    "howToPractice": "Қалай орындау керек",
+    "markComplete": "Орындалды деп белгілеу",
+    "completed": "Орындалды"
+  },
+  "pronunciation": {
+    "title": "Айтылым",
+    "subtitle": "нені жаттығатыныңызды таңдаңыз",
+    "typeSounds": "Дыбыстар",
+    "typeSoundsDesc": "Жеке дыбыстарды анық айтуды жаттығыңыз.",
+    "typeWords": "Сөздер",
+    "typeWordsDesc": "Сөздерді толық дауыстап айтыңыз.",
+    "typePicture": "Суретті ата",
+    "typePictureDesc": "Суретке қарап, оны атаңыз.",
+    "whatIsThis": "бұл не?",
+    "say": "айт",
+    "tapToRecord": "жазу үшін түртіңіз",
+    "listening": "тыңдап тұрмын... тоқтату үшін түртіңіз",
+    "checking": "тексеріп жатырмын...",
+    "done": "жақсы талпыныс!",
+    "resultGreat": "⭐ Тамаша айтылым!",
+    "resultPractice": "Жақсы талпыныс — тағы жаттығайық",
+    "accuracy": "Дәлдік: {{accuracy}}%",
+    "next": "Келесі",
+    "permissionDenied": "Жазу үшін микрофонға рұқсат қажет.",
+    "analyzeFailed": "Жазбаны тексеру мүмкін болмады. Қайталап көріңіз."
+  },
+  "therapists": {
+    "title": "Логопедтер",
+    "subtitle": "мамандарды қарау",
+    "searchPlaceholder": "Аты, мамандығы немесе қаласы бойынша іздеу",
+    "noResults": "Сұранысыңызға сай маман табылмады",
+    "allSpecialties": "Барлығы"
+  },
+  "profile": {
+    "title": "Профиль",
+    "interfaceLanguage": "Интерфейс тілі",
+    "myChildren": "Менің балаларым",
+    "addChild": "+ Бала қосу",
+    "settings": "Параметрлер",
+    "notifications": "Хабарламалар",
+    "theme": "Тақырып",
+    "light": "Ашық",
+    "dark": "Қараңғы",
+    "logOut": "Шығу",
+    "progressTitle": "{{name}} прогресі",
+    "exercisesDone": "жаттығу орындалды",
+    "practiceTime": "жаттығу уақыты",
+    "pronunciationAttempts": "айтылым талпынысы",
+    "avgAccuracy": "орташа дәлдік",
+    "noProgressYet": "Әзірге жаттығу жазбасы жоқ.",
+    "editName": "Сіздің атыңыз",
+    "saveName": "Сақтау"
+  }
+}

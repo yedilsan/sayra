@@ -1,0 +1,137 @@
+{
+  "common": {
+    "loading": "読み込み中...",
+    "retry": "再試行",
+    "save": "保存",
+    "cancel": "キャンセル",
+    "continue": "続ける",
+    "back": "戻る",
+    "somethingWentWrong": "問題が発生しました。",
+    "error": "エラー"
+  },
+  "app": {
+    "name": "Say Ra",
+    "tagline": "多言語言語療法を、楽しく"
+  },
+  "tabs": {
+    "aac": "AAC",
+    "exercises": "練習",
+    "pronunciation": "発音",
+    "therapists": "専門家",
+    "profile": "プロフィール"
+  },
+  "auth": {
+    "logIn": "ログイン",
+    "signUp": "新規登録",
+    "parentName": "保護者の名前",
+    "email": "メールアドレス",
+    "password": "パスワード",
+    "submitLogIn": "ログイン",
+    "submitSignUp": "アカウントを作成",
+    "errorFillFields": "すべての項目を入力してください。",
+    "errorInvalidCredentials": "メールアドレスまたはパスワードが正しくありません。",
+    "errorEmailInUse": "このメールアドレスは既に使用されています。",
+    "noAccountPrompt": "アカウントをお持ちでないですか?",
+    "hasAccountPrompt": "すでにアカウントをお持ちですか?",
+    "errorEmailRequired": "メールアドレスを入力してください。",
+    "errorEmailInvalid": "有効なメールアドレスを入力してください。",
+    "errorPasswordRequired": "パスワードを入力してください。",
+    "errorPasswordShort": "パスワードは8文字以上で入力してください",
+    "errorNameRequired": "名前を入力してください。",
+    "errorEmailRegistered": "このメールアドレスは登録済みです。ログインをお試しください。",
+    "errorIncorrect": "メールアドレスまたはパスワードが正しくありません",
+    "errorNetwork": "問題が発生しました。接続を確認して、もう一度お試しください。"
+  },
+  "onboarding": {
+    "addChildTitle": "お子さまを追加",
+    "addChildSubtitle": "はじめる前にもう一歩",
+    "namePlaceholder": "お子さまの名前",
+    "age": "年齢",
+    "errorMissingFields": "名前と年齢を入力してください。",
+    "whoIsPracticingTitle": "誰が練習しますか?",
+    "whoIsPracticingSubtitle": "続けるお子さまを選んでください",
+    "addAnotherChild": "+ 別のお子さまを追加",
+    "ageLabel": "{{age}}歳"
+  },
+  "ai": {
+    "greeting": "こんにちは、Raです 👋",
+    "intro": "今日のレッスンや、お子さまが練習している音、アプリの使い方について何でも聞いてください。",
+    "placeholder": "Raに質問..."
+  },
+  "childSwitch": {
+    "title": "お子さまを切り替え",
+    "active": "選択中",
+    "switch": "切り替え"
+  },
+  "aac": {
+    "title": "AACボード",
+    "subtitle": "タイルをタップして文を作ろう",
+    "placeholder": "タイルをタップして文を話そう...",
+    "speakLabel": "文を話す"
+  },
+  "exercises": {
+    "title": "練習",
+    "subtitle": "練習する分野を選んでください",
+    "exerciseCount": "{{count}}個の練習",
+    "pointToThe": "指さそう",
+    "quizProgress": "{{total}}問中{{current}}問目",
+    "correct": "★ よくできました!",
+    "incorrect": "もう一度!",
+    "quizCompleteTitle": "よくがんばりました!すべての単語が終わりました!",
+    "quizCompleteScore": "{{total}}問中{{correct}}問が一発正解",
+    "tryAgain": "もう一度挑戦",
+    "backToExercises": "練習一覧に戻る",
+    "howToPractice": "練習のしかた",
+    "markComplete": "完了にする",
+    "completed": "完了"
+  },
+  "pronunciation": {
+    "title": "発音",
+    "subtitle": "練習する内容を選んでください",
+    "typeSounds": "音",
+    "typeSoundsDesc": "単音をはっきり発音する練習。",
+    "typeWords": "ことば",
+    "typeWordsDesc": "単語を声に出して言ってみよう。",
+    "typePicture": "絵の名前を言おう",
+    "typePictureDesc": "絵を見て名前を言ってみよう。",
+    "whatIsThis": "これはなに?",
+    "say": "いってみよう",
+    "tapToRecord": "タップして録音",
+    "listening": "聞いています... タップで停止",
+    "checking": "確認中...",
+    "done": "よくがんばりました!",
+    "resultGreat": "⭐ とても良い発音です!",
+    "resultPractice": "いい調子 — もう少し練習しよう",
+    "accuracy": "正確さ: {{accuracy}}%",
+    "next": "次へ",
+    "permissionDenied": "録音にはマイクの許可が必要です。",
+    "analyzeFailed": "録音を確認できませんでした。もう一度お試しください。"
+  },
+  "therapists": {
+    "title": "言語聴覚士",
+    "subtitle": "専門家を探す",
+    "searchPlaceholder": "名前・専門・都市で検索",
+    "noResults": "条件に合う専門家が見つかりません",
+    "allSpecialties": "すべて"
+  },
+  "profile": {
+    "title": "プロフィール",
+    "interfaceLanguage": "表示言語",
+    "myChildren": "お子さま",
+    "addChild": "+ お子さまを追加",
+    "settings": "設定",
+    "notifications": "通知",
+    "theme": "テーマ",
+    "light": "ライト",
+    "dark": "ダーク",
+    "logOut": "ログアウト",
+    "progressTitle": "{{name}}の進捗",
+    "exercisesDone": "完了した練習",
+    "practiceTime": "練習時間",
+    "pronunciationAttempts": "発音の挑戦回数",
+    "avgAccuracy": "平均正確度",
+    "noProgressYet": "まだ練習の記録がありません。",
+    "editName": "お名前",
+    "saveName": "保存"
+  }
+}

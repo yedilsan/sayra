@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  body{margin:0;background:#EDEAE2;font-family:'Nunito',sans-serif;-webkit-font-smoothing:antialiased}
+  ::-webkit-scrollbar{display:none}
+  @keyframes sheetUp{from{transform:translateY(24px);opacity:0}to{transform:translateY(0);opacity:1}}
+  @keyframes dotPulse{0%,80%,100%{opacity:.25;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
+  a{color:#3AA6A0}
+  a:hover{color:#2C8A85}
+</style>
+</helmet>
+
+<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:48px 24px;box-sizing:border-box">
+  <x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+
+    <div style="height:100%;display:flex;flex-direction:column;position:relative;background:#FBF8F2;font-family:'Nunito',sans-serif;overflow:hidden">
+
+      <!-- ============ AUTH SCREEN ============ -->
+      <sc-if value="{{ showAuth }}" hint-placeholder-val="{{ true }}">
+        <div style="height:100%;display:flex;flex-direction:column;justify-content:center;padding:64px 28px 0;box-sizing:border-box;overflow:auto">
+          <div style="text-align:center;margin-bottom:28px">
+            <div style="width:64px;height:64px;border-radius:20px;background:linear-gradient(135deg,#3AA6A0,#8C86D6);margin:0 auto 14px;display:flex;align-items:center;justify-content:center">
+              <span style="font:900 24px 'Nunito';color:#fff">Ra</span>
+            </div>
+            <div style="font:900 26px 'Nunito';color:#262A33">Say Ra</div>
+            <div style="font:600 13px 'Nunito';color:#6B7280;margin-top:4px">Multilingual speech therapy, made playful</div>
+          </div>
+
+          <div style="display:flex;background:#F0EEE7;border-radius:14px;padding:4px;margin-bottom:20px">
+            <button style="{{ loginTabStyle }}" onClick="{{ showLoginTab }}">Log in</button>
+            <button style="{{ signupTabStyle }}" onClick="{{ showSignupTab }}">Sign up</button>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <sc-if value="{{ isSignup }}" hint-placeholder-val="{{ false }}">
+              <input type="text" placeholder="Parent name" value="{{ name }}" onChange="{{ onNameChange }}"
+                style="height:50px;border-radius:14px;border:2px solid #E7E3D8;padding:0 16px;font:700 15px 'Nunito';color:#262A33;outline:none;box-sizing:border-box"/>
+            </sc-if>
+            <input type="email" placeholder="Email" value="{{ email }}" onChange="{{ onEmailChange }}"
+              style="height:50px;border-radius:14px;border:2px solid #E7E3D8;padding:0 16px;font:700 15px 'Nunito';color:#262A33;outline:none;box-sizing:border-box"/>
+            <input type="password" placeholder="Password" value="{{ password }}" onChange="{{ onPasswordChange }}"
+              style="height:50px;border-radius:14px;border:2px solid #E7E3D8;padding:0 16px;font:700 15px 'Nunito';color:#262A33;outline:none;box-sizing:border-box"/>
+
+            <sc-if value="{{ hasAuthError }}" hint-placeholder-val="{{ false }}">
+              <div style="color:#C4573D;font:700 12px 'Nunito';padding:0 4px">{{ authError }}</div>
+            </sc-if>
+
+            <button onClick="{{ submitAuth }}" style="height:52px;border-radius:14px;border:none;background:#262A33;color:#fff;font:800 16px 'Nunito';margin-top:6px;cursor:pointer">{{ submitLabel }}</button>
+          </div>
+
+          <div style="text-align:center;margin-top:18px;font:600 13px 'Nunito';color:#6B7280">{{ switchPrompt }} <a href="javascript:void(0)" onClick="{{ toggleAuthMode }}" style="font:800 13px 'Nunito';color:#3AA6A0;text-decoration:none">{{ switchAction }}</a></div>
+        </div>
+      </sc-if>
+
+      <!-- ============ ADD CHILD SCREEN ============ -->
+      <sc-if value="{{ showAddChild }}" hint-placeholder-val="{{ false }}">
+        <div style="height:100%;display:flex;flex-direction:column;padding:64px 28px 28px;box-sizing:border-box;overflow:auto">
+          <div style="text-align:center;margin-bottom:24px">
+            <div style="font:900 24px 'Nunito';color:#262A33">Add your child</div>
+            <div style="font:600 13px 'Nunito';color:#6B7280;margin-top:6px">one quick step before we get started</div>
+          </div>
+
+          <div style="display:flex;justify-content:center;margin-bottom:22px">
+            <div style="{{ selectedAvatarPreviewStyle }}"></div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px">
+            <input type="text" placeholder="Child's name" value="{{ childName }}" onChange="{{ onChildNameChange }}"
+              style="height:50px;border-radius:14px;border:2px solid #E7E3D8;padding:0 16px;font:700 15px 'Nunito';color:#262A33;outline:none;box-sizing:border-box"/>
+
+            <div>
+              <div style="font:800 12px 'Nunito';color:#6B7280;margin-bottom:8px">Age</div>
+              <div style="display:flex;gap:8px">
+                <sc-for list="{{ ageOptions }}" as="opt" hint-placeholder-count="5">
+                  <button onClick="{{ opt.onSelect }}" style="{{ opt.style }}">{{ opt.age }}</button>
+                </sc-for>
+              </div>
+            </div>
+
+            <div>
+              <div style="font:800 12px 'Nunito';color:#6B7280;margin-bottom:8px">Avatar <span style="font:600 12px 'Nunito';color:#B9B3A2">(optional)</span></div>
+              <div style="display:flex;gap:10px">
+                <sc-for list="{{ avatarOptions }}" as="av" hint-placeholder-count="5">
+                  <button onClick="{{ av.onSelect }}" style="{{ av.style }}"></button>
+                </sc-for>
+              </div>
+            </div>
+
+            <sc-if value="{{ hasChildError }}" hint-placeholder-val="{{ false }}">
+              <div style="color:#C4573D;font:700 12px 'Nunito';padding:0 4px">{{ childError }}</div>
+            </sc-if>
+          </div>
+
+          <button onClick="{{ submitChild }}" style="height:52px;border-radius:14px;border:none;background:#262A33;color:#fff;font:800 16px 'Nunito';cursor:pointer;margin-top:auto">Continue</button>
+        </div>
+      </sc-if>
+
+      <!-- ============ WHO'S PRACTICING SCREEN ============ -->
+      <sc-if value="{{ showChildPicker }}" hint-placeholder-val="{{ false }}">
+        <div style="height:100%;display:flex;flex-direction:column;padding:64px 28px 28px;box-sizing:border-box;overflow:auto">
+          <div style="text-align:center;margin-bottom:26px">
+            <div style="font:900 24px 'Nunito';color:#262A33">Who's practicing?</div>
+            <div style="font:600 13px 'Nunito';color:#6B7280;margin-top:6px">pick a child to continue</div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <sc-for list="{{ pickerChildren }}" as="c" hint-placeholder-count="2">
+              <button onClick="{{ c.onPick }}" style="width:100%;box-sizing:border-box;display:flex;align-items:center;gap:14px;padding:16px;border-radius:18px;border:none;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.05);cursor:pointer;text-align:left">
+                <div style="width:56px;height:56px;border-radius:50%;background:{{ c.avatarColor }};flex-shrink:0;display:flex;align-items:center;justify-content:center">
+                  <span style="font:900 20px 'Nunito';color:#262A33">{{ c.initial }}</span>
+                </div>
+                <div style="flex:1">
+                  <div style="font:800 17px 'Nunito';color:#262A33">{{ c.name }}</div>
+                  <div style="font:700 12px 'Nunito';color:#6B7280;margin-top:2px">Age {{ c.age }} · Last practiced: {{ c.lastPracticed }}</div>
+                </div>
+                <span style="font:700 20px 'Nunito';color:#B9B3A2">›</span>
+              </button>
+            </sc-for>
+          </div>
+
+          <sc-if value="{{ showAddChildForm }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#fff;border-radius:16px;padding:16px;margin-top:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)">
+              <input type="text" placeholder="Child's name" value="{{ newChildName }}" onChange="{{ onNewChildNameChange }}"
+                style="width:100%;box-sizing:border-box;height:46px;border-radius:12px;border:2px solid #E7E3D8;padding:0 14px;font:700 14px 'Nunito';color:#262A33;outline:none;margin-bottom:10px"/>
+              <div style="font:800 12px 'Nunito';color:#6B7280;margin-bottom:8px">Age</div>
+              <div style="display:flex;gap:6px;margin-bottom:12px">
+                <sc-for list="{{ newChildAgeOptions }}" as="opt" hint-placeholder-count="5">
+                  <button onClick="{{ opt.onSelect }}" style="{{ opt.style }}">{{ opt.age }}</button>
+                </sc-for>
+              </div>
+              <div style="font:800 12px 'Nunito';color:#6B7280;margin-bottom:8px">Avatar <span style="font:600 12px 'Nunito';color:#B9B3A2">(optional)</span></div>
+              <div style="display:flex;gap:8px;margin-bottom:12px">
+                <sc-for list="{{ newChildAvatarOptions }}" as="av" hint-placeholder-count="5">
+                  <button onClick="{{ av.onSelect }}" style="{{ av.style }}"></button>
+                </sc-for>
+              </div>
+              <sc-if value="{{ hasNewChildError }}" hint-placeholder-val="{{ false }}">
+                <div style="color:#C4573D;font:700 12px 'Nunito';margin-bottom:10px">{{ newChildError }}</div>
+              </sc-if>
+              <button onClick="{{ saveNewChild }}" style="width:100%;height:46px;border-radius:12px;border:none;background:#262A33;color:#fff;font:800 14px 'Nunito';cursor:pointer">Save & continue</button>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ showAddAnotherChildButton }}" hint-placeholder-val="{{ true }}">
+            <button onClick="{{ goToAddChildFromPicker }}" style="margin-top:14px;background:none;border:2px dashed #D9D4C6;border-radius:16px;padding:16px;cursor:pointer;font:800 14px 'Nunito';color:#6B7280">+ Add another child</button>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <!-- ============ MAIN APP ============ -->
+      <sc-if value="{{ showApp }}" hint-placeholder-val="{{ false }}">
+        <div style="height:100%;display:flex;flex-direction:column;position:relative">
+
+          <!-- ===== TOP CHILD SWITCHER ===== -->
+          <button onClick="{{ toggleChildSwitch }}" style="position:absolute;top:0;left:0;right:0;height:56px;background:rgba(251,248,242,.96);backdrop-filter:blur(10px);border:none;border-bottom:1px solid #F0EEE7;z-index:20;display:flex;align-items:center;gap:10px;padding:0 18px;cursor:pointer">
+            <div style="width:34px;height:34px;border-radius:50%;background:{{ activeChildAvatarColor }};flex-shrink:0;display:flex;align-items:center;justify-content:center">
+              <span style="font:900 14px 'Nunito';color:#262A33">{{ activeChildInitial }}</span>
+            </div>
+            <div style="font:800 14px 'Nunito';color:#262A33">{{ activeChildName }}</div>
+            <span style="font:700 11px 'Nunito';color:#B9B3A2">▾</span>
+          </button>
+
+          <div style="flex:1;overflow:auto;padding-top:56px;padding-bottom:106px;box-sizing:border-box">
+
+            <!-- ===== AAC TAB ===== -->
+            <sc-if value="{{ showAAC }}" hint-placeholder-val="{{ true }}">
+              <div>
+                <!-- FIXED ZONE: sentence strip + speak, core vocabulary slider -->
+                <div style="padding:0 18px 12px;border-bottom:1px solid #F0EEE7;margin-bottom:14px">
+                  <div style="font:900 24px 'Nunito';color:#262A33;margin-bottom:2px">AAC Board</div>
+                  <div style="font:600 12px 'Nunito';color:#6B7280;margin-bottom:14px">tap tiles to build a sentence</div>
+
+                  <div style="display:flex;gap:8px;align-items:center;margin-bottom:14px">
+                    <div style="flex:1;min-height:48px;border:2px dashed #D9D4C6;border-radius:14px;display:flex;align-items:center;gap:8px;padding:6px 12px;flex-wrap:wrap">
+                      <sc-if value="{{ hasStrip }}" hint-placeholder-val="{{ false }}">
+                        <sc-for list="{{ sentenceStrip }}" as="w" hint-placeholder-count="0">
+                          <div style="background:#DCEEEC;color:#1F7A75;font:800 13px 'Nunito';padding:6px 12px;border-radius:10px">{{ w }}</div>
+                        </sc-for>
+                      </sc-if>
+                      <span style="font:600 13px 'Nunito';color:#B9B3A2">{{ stripPlaceholder }}</span>
+                    </div>
+                    <button onClick="{{ speakStrip }}" style="{{ speakButtonStyle }}" aria-label="speak sentence">
+                      <div style="width:0;height:0;border-top:9px solid transparent;border-bottom:9px solid transparent;border-left:14px solid #fff;margin-left:3px"></div>
+                    </button>
+                  </div>
+
+
+                  <div ref="{{ carouselRef }}" onMouseDown="{{ onCarouselMouseDown }}" onMouseMove="{{ onCarouselMouseMove }}" onMouseUp="{{ onCarouselMouseUp }}" onMouseLeave="{{ onCarouselMouseUp }}" style="display:grid;grid-auto-flow:column;grid-template-rows:repeat(4,100px);grid-auto-columns:100px;gap:10px;overflow-x:auto;padding-bottom:6px;cursor:grab;user-select:none">
+                    <sc-for list="{{ carouselTiles }}" as="tile" hint-placeholder-count="12">
+                      <button onClick="{{ tile.onTap }}" style="width:100px;height:100px;border-radius:16px;border:none;background:{{ tile.bg }};display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer">
+                        <div style="width:34px;height:34px;border-radius:10px;background:{{ tile.iconColor }}"></div>
+                        <span style="font:800 12px 'Nunito';color:#262A33">{{ tile.label }}</span>
+                      </button>
+                    </sc-for>
+                  </div>
+                </div>
+
+                <!-- DYNAMIC ZONE: category selector, below the carousel -->
+                <div style="padding:0 18px">
+                  <div ref="{{ categoryRowRef }}" onMouseDown="{{ onCategoryRowMouseDown }}" onMouseMove="{{ onCategoryRowMouseMove }}" onMouseUp="{{ onCategoryRowMouseUp }}" onMouseLeave="{{ onCategoryRowMouseUp }}" style="display:flex;gap:10px;overflow-x:auto;padding-bottom:2px;cursor:grab;user-select:none">
+                    <button style="{{ foodChipStyle }}" onClick="{{ setCatFood }}">
+                      <div style="{{ foodIconStyle }}"></div><span style="{{ foodLabelStyle }}">Food</span>
+                    </button>
+                    <button style="{{ actionsChipStyle }}" onClick="{{ setCatActions }}">
+                      <div style="{{ actionsIconStyle }}"></div><span style="{{ actionsLabelStyle }}">Actions</span>
+                    </button>
+                    <button style="{{ feelingsChipStyle }}" onClick="{{ setCatFeelings }}">
+                      <div style="{{ feelingsIconStyle }}"></div><span style="{{ feelingsLabelStyle }}">Feelings</span>
+                    </button>
+                    <button style="{{ peopleChipStyle }}" onClick="{{ setCatPeople }}">
+                      <div style="{{ peopleIconStyle }}"></div><span style="{{ peopleLabelStyle }}">People</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </sc-if>
+
+            <!-- ===== EXERCISE TAB ===== -->
+            <sc-if value="{{ showExercise }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:0 18px">
+
+                <sc-if value="{{ showExerciseCategories }}" hint-placeholder-val="{{ true }}">
+                  <div style="font:900 24px 'Nunito';color:#262A33;margin-bottom:2px">Exercises</div>
+                  <div style="font:600 12px 'Nunito';color:#6B7280;margin-bottom:16px">pick an area to practice</div>
+
+                  <div style="display:flex;flex-direction:column;gap:12px">
+                    <sc-for list="{{ exerciseCategories }}" as="cat" hint-placeholder-count="5">
+                      <button onClick="{{ cat.onOpen }}" style="display:flex;align-items:center;gap:14px;padding:16px;border-radius:18px;border:none;cursor:pointer;background:{{ cat.bg }};text-align:left">
+                        <div style="width:52px;height:52px;border-radius:14px;background:{{ cat.iconColor }};flex-shrink:0;display:flex;align-items:center;justify-content:center">
+                          <span style="font:900 22px 'Nunito';color:#fff">{{ cat.glyph }}</span>
+                        </div>
+                        <div style="flex:1">
+                          <div style="font:800 16px 'Nunito';color:#262A33">{{ cat.label }}</div>
+                          <div style="font:700 12px 'Nunito';color:#6B7280;margin-top:2px">{{ cat.count }} exercises</div>
+                        </div>
+                        <span style="font:700 20px 'Nunito';color:#B9B3A2">›</span>
+                      </button>
+                    </sc-for>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ showExerciseList }}" hint-placeholder-val="{{ false }}">
+                  <button onClick="{{ backToCategories }}" style="display:flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;padding:0;margin-bottom:12px">
+                    <span style="font:900 18px 'Nunito';color:#262A33">‹</span>
+                    <span style="font:800 13px 'Nunito';color:#262A33">Exercises</span>
+                  </button>
+
+                  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+                    <div style="width:44px;height:44px;border-radius:12px;background:{{ activeExerciseCategory.iconColor }};flex-shrink:0;display:flex;align-items:center;justify-content:center">
+                      <span style="font:900 18px 'Nunito';color:#fff">{{ activeExerciseCategory.glyph }}</span>
+                    </div>
+                    <div style="font:900 22px 'Nunito';color:#262A33">{{ activeExerciseCategory.label }}</div>
+                  </div>
+
+                  <div style="display:flex;flex-direction:column;gap:12px">
+                    <sc-for list="{{ activeExerciseCategory.exercises }}" as="ex" hint-placeholder-count="3">
+                      <button onClick="{{ ex.onOpen }}" style="background:#fff;border-radius:16px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.05);border:none;cursor:pointer;text-align:left;display:block;width:100%;box-sizing:border-box">
+                        <div style="font:800 15px 'Nunito';color:#262A33;margin-bottom:4px">{{ ex.title }}</div>
+                        <div style="font:600 13px 'Nunito';color:#6B7280;line-height:1.4">{{ ex.description }}</div>
+                      </button>
+                    </sc-for>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ showExerciseDetail }}" hint-placeholder-val="{{ false }}">
+                  <button onClick="{{ backToExerciseList }}" style="display:flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;padding:0;margin-bottom:14px">
+                    <span style="font:900 18px 'Nunito';color:#262A33">‹</span>
+                    <span style="font:800 13px 'Nunito';color:#262A33">{{ activeExerciseCategory.label }}</span>
+                  </button>
+
+                  <sc-if value="{{ isListenPointQuiz }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+                      <div style="font:900 22px 'Nunito';color:#262A33">{{ activeExercise.title }}</div>
+                      <div style="font:800 12px 'Nunito';color:#9B9585">{{ quizProgressLabel }}</div>
+                    </div>
+
+                    <div style="background:#E3ECF4;border-radius:18px;padding:18px;text-align:center;margin-bottom:18px">
+                      <div style="font:700 13px 'Nunito';color:#4A6E8A;margin-bottom:4px">point to the</div>
+                      <div style="font:900 28px 'Nunito';color:#1F4A66">{{ quizTargetLabel }}</div>
+                    </div>
+
+                    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px">
+                      <sc-for list="{{ quizCards }}" as="card" hint-placeholder-count="3">
+                        <button onClick="{{ card.onTap }}" style="aspect-ratio:1;border-radius:20px;border:none;background:{{ card.bg }};display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer">
+                          <div style="width:44px;height:44px;border-radius:12px;background:{{ card.iconColor }}"></div>
+                          <span style="font:800 13px 'Nunito';color:#262A33">{{ card.label }}</span>
+                        </button>
+                      </sc-for>
+                    </div>
+
+                    <sc-if value="{{ showQuizCorrect }}" hint-placeholder-val="{{ false }}">
+                      <div style="background:#DCEEEC;border-radius:16px;padding:16px;text-align:center;display:flex;align-items:center;justify-content:center;gap:10px">
+                        <span style="font:900 22px 'Nunito'">★</span>
+                        <span style="font:800 16px 'Nunito';color:#1F7A75">Well done!</span>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ showQuizIncorrect }}" hint-placeholder-val="{{ false }}">
+                      <div style="background:#FBE7D8;border-radius:16px;padding:16px;text-align:center">
+                        <span style="font:800 16px 'Nunito';color:#B5713D">Try again!</span>
+                      </div>
+                    </sc-if>
+                  </sc-if>
+
+                  <sc-if value="{{ showQuizComplete }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:20px 8px">
+                      <div style="width:76px;height:76px;border-radius:50%;background:linear-gradient(135deg,#3AA6A0,#8C86D6);display:flex;align-items:center;justify-content:center;margin-bottom:18px">
+                        <span style="font:900 34px 'Nunito';color:#fff">★</span>
+                      </div>
+                      <div style="font:900 22px 'Nunito';color:#262A33;margin-bottom:8px">Great job! You finished all the words!</div>
+                      <div style="font:700 14px 'Nunito';color:#6B7280;margin-bottom:26px">{{ quizScoreLabel }}</div>
+
+                      <button onClick="{{ restartQuiz }}" style="width:100%;height:52px;border-radius:14px;border:none;background:#262A33;color:#fff;font:800 16px 'Nunito';cursor:pointer;margin-bottom:12px">Try Again</button>
+                      <button onClick="{{ backToExerciseList }}" style="width:100%;height:52px;border-radius:14px;border:2px solid #E7E3D8;background:#fff;color:#262A33;font:800 16px 'Nunito';cursor:pointer">Back to Exercises</button>
+                    </div>
+                  </sc-if>
+
+                  <sc-if value="{{ isVideoExercise }}" hint-placeholder-val="{{ true }}">
+                    <div style="font:900 22px 'Nunito';color:#262A33;margin-bottom:10px">{{ activeExercise.title }}</div>
+
+                    <div style="border-radius:16px;overflow:hidden;background:#000;margin-bottom:14px;aspect-ratio:16/9">
+                      <iframe src="{{ activeExercise.videoUrl }}" title="{{ activeExercise.title }}" style="width:100%;height:100%;border:none" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="true"></iframe>
+                    </div>
+
+                    <div style="background:#fff;border-radius:16px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.05)">
+                      <div style="font:800 12px 'Nunito';color:#9B9585;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px">How to practice</div>
+                      <div style="font:600 14px 'Nunito';color:#3F4450;line-height:1.5">{{ activeExercise.description }}</div>
+                    </div>
+                  </sc-if>
+                </sc-if>
+
+              </div>
+            </sc-if>
+
+            <!-- ===== PRONUNCIATION TAB ===== -->
+            <sc-if value="{{ showPronunciation }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:0 18px">
+
+                <sc-if value="{{ showPronunciationTypes }}" hint-placeholder-val="{{ true }}">
+                  <div style="font:900 24px 'Nunito';color:#262A33;margin-bottom:2px">Pronunciation</div>
+                  <div style="font:600 12px 'Nunito';color:#6B7280;margin-bottom:16px">choose what to practice</div>
+
+                  <div style="display:flex;flex-direction:column;gap:12px">
+                    <sc-for list="{{ pronunciationTypeTiles }}" as="t" hint-placeholder-count="3">
+                      <button onClick="{{ t.onOpen }}" style="display:flex;align-items:center;gap:14px;padding:16px;border-radius:18px;border:none;cursor:pointer;background:{{ t.bg }};text-align:left">
+                        <div style="width:52px;height:52px;border-radius:14px;background:{{ t.iconColor }};flex-shrink:0;display:flex;align-items:center;justify-content:center">
+                          <span style="font:900 20px 'Nunito';color:#fff">{{ t.glyph }}</span>
+                        </div>
+                        <div style="flex:1">
+                          <div style="font:800 16px 'Nunito';color:#262A33">{{ t.label }}</div>
+                          <div style="font:700 12px 'Nunito';color:#6B7280;margin-top:2px">{{ t.description }}</div>
+                        </div>
+                        <span style="font:700 20px 'Nunito';color:#B9B3A2">›</span>
+                      </button>
+                    </sc-for>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ showPronunciationSession }}" hint-placeholder-val="{{ false }}">
+                  <button onClick="{{ backToPronunciationTypes }}" style="display:flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;padding:0;margin-bottom:14px">
+                    <span style="font:900 18px 'Nunito';color:#262A33">‹</span>
+                    <span style="font:800 13px 'Nunito';color:#262A33">{{ activePronunciationTypeLabel }}</span>
+                  </button>
+
+                  <div style="background:#FBE7D8;border-radius:18px;padding:26px 22px;text-align:center;margin-bottom:16px">
+                    <sc-if value="{{ isPictureType }}" hint-placeholder-val="{{ false }}">
+                      <div style="font:700 12px 'Nunito';color:#B5713D;margin-bottom:14px">what is this?</div>
+                      <div style="width:110px;height:110px;border-radius:20px;background:{{ pictureIconColor }};margin:0 auto 18px"></div>
+                    </sc-if>
+                    <sc-if value="{{ isPictureType }}" hint-placeholder-val="{{ false }}"></sc-if>
+                    <sc-if value="{{ showTextPrompt }}" hint-placeholder-val="{{ true }}">
+                      <div style="font:700 12px 'Nunito';color:#B5713D;margin-bottom:10px">say</div>
+                      <div style="font:900 34px 'Nunito';color:#262A33;margin-bottom:18px">{{ promptTargetText }}</div>
+                    </sc-if>
+
+                    <button onClick="{{ toggleRecording }}" style="{{ recordButtonStyle }}">
+                      <sc-if value="{{ isAnalyzing }}" hint-placeholder-val="{{ false }}">
+                        <div style="display:flex;gap:5px;align-items:center;justify-content:center">
+                          <span style="width:7px;height:7px;border-radius:50%;background:#fff;display:inline-block;animation:dotPulse 1s infinite;animation-delay:0s"></span>
+                          <span style="width:7px;height:7px;border-radius:50%;background:#fff;display:inline-block;animation:dotPulse 1s infinite;animation-delay:.15s"></span>
+                          <span style="width:7px;height:7px;border-radius:50%;background:#fff;display:inline-block;animation:dotPulse 1s infinite;animation-delay:.3s"></span>
+                        </div>
+                      </sc-if>
+                      <sc-if value="{{ showRecordIcon }}" hint-placeholder-val="{{ true }}">
+                        {{ recordIcon }}
+                      </sc-if>
+                    </button>
+                    <div style="font:700 12px 'Nunito';color:#B5713D;margin-top:12px">{{ recordLabel }}</div>
+                  </div>
+
+                  <sc-if value="{{ showResult }}" hint-placeholder-val="{{ false }}">
+                    <div style="{{ resultCardStyle }}">
+                      <div style="font:900 18px 'Nunito';margin-bottom:4px">{{ resultHeadline }}</div>
+                      <sc-if value="{{ isPictureType }}" hint-placeholder-val="{{ false }}">
+                        <div style="font:700 13px 'Nunito';color:#6B7280;margin-bottom:14px">that's a {{ resultAnswerLabel }}</div>
+                      </sc-if>
+                      <button onClick="{{ nextWord }}" style="width:100%;height:48px;border-radius:14px;border:none;background:#262A33;color:#fff;font:800 14px 'Nunito';cursor:pointer;margin-top:6px">Next</button>
+                    </div>
+                  </sc-if>
+                </sc-if>
+
+              </div>
+            </sc-if>
+
+            <!-- ===== THERAPISTS TAB ===== -->
+            <sc-if value="{{ showTherapists }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:0 18px">
+                <div style="font:900 24px 'Nunito';color:#262A33;margin-bottom:2px">Speech Therapists</div>
+                <div style="font:600 12px 'Nunito';color:#6B7280;margin-bottom:14px">browse and book a session</div>
+
+                <input type="text" placeholder="Search by name, specialty, or city" value="{{ therapistQuery }}" onChange="{{ onTherapistQueryChange }}"
+                  style="width:100%;box-sizing:border-box;height:44px;border-radius:12px;border:2px solid #E7E3D8;padding:0 14px;font:700 13px 'Nunito';color:#262A33;outline:none;margin-bottom:12px"/>
+
+                <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;margin-bottom:14px">
+                  <sc-for list="{{ specialtyChips }}" as="c" hint-placeholder-count="4">
+                    <button onClick="{{ c.onToggle }}" style="{{ c.style }}">{{ c.label }}</button>
+                  </sc-for>
+                </div>
+
+                <div style="display:flex;flex-direction:column;gap:12px">
+                  <sc-for list="{{ filteredTherapists }}" as="t" hint-placeholder-count="3">
+                    <div style="background:#fff;border-radius:16px;padding:14px;display:flex;gap:12px;align-items:center;box-shadow:0 1px 3px rgba(0,0,0,.05)">
+                      <div style="width:46px;height:46px;border-radius:50%;background:{{ t.color }};flex-shrink:0"></div>
+                      <div style="flex:1;min-width:0">
+                        <div style="font:800 14px 'Nunito';color:#262A33">{{ t.name }}</div>
+                        <div style="font:700 11px 'Nunito';color:#6B7280;margin:2px 0">{{ t.specialty }} · {{ t.city }} · {{ t.languages }}</div>
+                        <div style="font:700 11px 'Nunito';color:#E8935F">{{ t.stars }}</div>
+                      </div>
+                      <button onClick="{{ t.onBook }}" style="{{ t.bookStyle }}">{{ t.bookLabel }}</button>
+                    </div>
+                  </sc-for>
+                </div>
+                <sc-if value="{{ noTherapistResults }}" hint-placeholder-val="{{ false }}">
+                  <div style="text-align:center;padding:32px 0;font:700 13px 'Nunito';color:#6B7280">No therapists match your filters</div>
+                </sc-if>
+              </div>
+            </sc-if>
+
+            <!-- ===== PROFILE TAB ===== -->
+            <sc-if value="{{ showProfile }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:0 18px">
+                <div style="font:900 24px 'Nunito';color:#262A33;margin-bottom:14px">Profile</div>
+
+                <!-- SECTION 1: parent header + interface language -->
+                <div style="background:#fff;border-radius:16px;padding:16px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.05)">
+                  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+                    <div style="width:52px;height:52px;border-radius:50%;background:#5B8DBE;flex-shrink:0"></div>
+                    <div>
+                      <div style="font:800 16px 'Nunito';color:#262A33">{{ parentName }}</div>
+                      <div style="font:700 12px 'Nunito';color:#6B7280">{{ email }}</div>
+                    </div>
+                  </div>
+                  <div style="font:800 11px 'Nunito';color:#9B9585;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px">Interface language</div>
+                  <div style="display:flex;gap:8px">
+                    <button style="{{ langRuStyle }}" onClick="{{ setLangRu }}">RU</button>
+                    <button style="{{ langKzStyle }}" onClick="{{ setLangKz }}">KZ</button>
+                    <button style="{{ langJaStyle }}" onClick="{{ setLangJa }}">JA</button>
+                    <button style="{{ langEnStyle }}" onClick="{{ setLangEn }}">EN</button>
+                  </div>
+                </div>
+
+                <div style="height:1px;background:#E7E3D8;margin:0 0 16px"></div>
+
+                <!-- SECTION 2: My Children -->
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+                  <div style="font:800 13px 'Nunito';color:#262A33">My Children</div>
+                  <button onClick="{{ toggleAddChildForm }}" style="background:none;border:none;cursor:pointer;font:800 12px 'Nunito';color:#3AA6A0">{{ addChildToggleLabel }}</button>
+                </div>
+
+                <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
+                  <sc-for list="{{ profileChildren }}" as="c" hint-placeholder-count="2">
+                    <button onClick="{{ c.onSetActive }}" style="{{ c.cardStyle }}">
+                      <div style="width:44px;height:44px;border-radius:50%;background:{{ c.avatarColor }};flex-shrink:0"></div>
+                      <div style="flex:1;text-align:left">
+                        <div style="font:800 14px 'Nunito';color:#262A33">{{ c.name }}</div>
+                        <div style="font:600 12px 'Nunito';color:#6B7280">age {{ c.age }}</div>
+                      </div>
+                      <span style="{{ c.badgeStyle }}">{{ c.badgeLabel }}</span>
+                    </button>
+                  </sc-for>
+                </div>
+
+                <sc-if value="{{ showAddChildForm }}" hint-placeholder-val="{{ false }}">
+                  <div style="background:#fff;border-radius:16px;padding:16px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.05)">
+                    <input type="text" placeholder="Child's name" value="{{ newChildName }}" onChange="{{ onNewChildNameChange }}"
+                      style="width:100%;box-sizing:border-box;height:46px;border-radius:12px;border:2px solid #E7E3D8;padding:0 14px;font:700 14px 'Nunito';color:#262A33;outline:none;margin-bottom:10px"/>
+                    <div style="display:flex;gap:8px;margin-bottom:10px">
+                      <sc-for list="{{ newChildAgeOptions }}" as="opt" hint-placeholder-count="5">
+                        <button onClick="{{ opt.onSelect }}" style="{{ opt.style }}">{{ opt.age }}</button>
+                      </sc-for>
+                    </div>
+                    <div style="display:flex;gap:10px;margin-bottom:14px">
+                      <sc-for list="{{ newChildAvatarOptions }}" as="av" hint-placeholder-count="5">
+                        <button onClick="{{ av.onSelect }}" style="{{ av.style }}"></button>
+                      </sc-for>
+                    </div>
+                    <sc-if value="{{ hasNewChildError }}" hint-placeholder-val="{{ false }}">
+                      <div style="color:#C4573D;font:700 12px 'Nunito';margin-bottom:10px">{{ newChildError }}</div>
+                    </sc-if>
+                    <button onClick="{{ saveNewChild }}" style="width:100%;height:46px;border-radius:12px;border:none;background:#262A33;color:#fff;font:800 14px 'Nunito';cursor:pointer">Save child</button>
+                  </div>
+                </sc-if>
+
+                <div style="height:1px;background:#E7E3D8;margin:0 0 16px"></div>
+
+                <!-- SECTION 3: Settings -->
+                <div style="font:800 13px 'Nunito';color:#262A33;margin-bottom:8px">Settings</div>
+                <div style="background:#fff;border-radius:16px;overflow:hidden;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.05)">
+                  <div style="display:flex;align-items:center;justify-content:space-between;padding:14px;border-bottom:1px solid #F0EEE7">
+                    <span style="font:700 14px 'Nunito';color:#262A33">Notifications</span>
+                    <button onClick="{{ toggleNotifs }}" style="{{ notifSwitchStyle }}"><div style="{{ notifKnobStyle }}"></div></button>
+                  </div>
+                  <div style="display:flex;align-items:center;justify-content:space-between;padding:14px;border-bottom:1px solid #F0EEE7">
+                    <span style="font:700 14px 'Nunito';color:#262A33">Theme</span>
+                    <div style="display:flex;background:#F0EEE7;border-radius:10px;padding:3px">
+                      <button style="{{ themeLightStyle }}" onClick="{{ setThemeLight }}">Light</button>
+                      <button style="{{ themeDarkStyle }}" onClick="{{ setThemeDark }}">Dark</button>
+                    </div>
+                  </div>
+                  <button onClick="{{ toggleChangePassword }}" style="width:100%;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;padding:14px;border:none;background:none;cursor:pointer;border-bottom:1px solid #F0EEE7">
+                    <span style="font:700 14px 'Nunito';color:#262A33">Change password</span>
+                    <span style="font:700 16px 'Nunito';color:#B9B3A2">›</span>
+                  </button>
+
+                  <sc-if value="{{ showChangePassword }}" hint-placeholder-val="{{ false }}">
+                    <div style="padding:14px;border-bottom:1px solid #F0EEE7;display:flex;flex-direction:column;gap:10px">
+                      <input type="password" placeholder="Current password" style="height:44px;border-radius:12px;border:2px solid #E7E3D8;padding:0 14px;font:700 13px 'Nunito';outline:none;box-sizing:border-box"/>
+                      <input type="password" placeholder="New password" style="height:44px;border-radius:12px;border:2px solid #E7E3D8;padding:0 14px;font:700 13px 'Nunito';outline:none;box-sizing:border-box"/>
+                      <button onClick="{{ toggleChangePassword }}" style="height:44px;border-radius:12px;border:none;background:#262A33;color:#fff;font:800 13px 'Nunito';cursor:pointer">Save password</button>
+                    </div>
+                  </sc-if>
+
+                  <button onClick="{{ logout }}" style="width:100%;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;padding:14px;border:none;background:none;cursor:pointer">
+                    <span style="font:700 14px 'Nunito';color:#C4573D">Log out</span>
+                    <span style="font:700 16px 'Nunito';color:#F0C9BB">›</span>
+                  </button>
+                </div>
+
+                <div style="height:1px;background:#E7E3D8;margin:0 0 16px"></div>
+
+                <!-- SECTION 4: Progress summary for active child -->
+                <div style="font:800 13px 'Nunito';color:#262A33;margin-bottom:8px">{{ activeChildName }}'s progress</div>
+                <div style="background:#fff;border-radius:16px;padding:16px;margin-bottom:24px;box-shadow:0 1px 3px rgba(0,0,0,.05)">
+                  <div style="display:flex;gap:10px;margin-bottom:14px">
+                    <div style="flex:1;background:#DCEEEC;border-radius:12px;padding:12px;text-align:center">
+                      <div style="font:900 22px 'Nunito';color:#1F7A75">{{ activeChildStats.exercisesCompleted }}</div>
+                      <div style="font:700 11px 'Nunito';color:#4A8C87">exercises done</div>
+                    </div>
+                    <div style="flex:1;background:#E7E5F7;border-radius:12px;padding:12px;text-align:center">
+                      <div style="font:900 22px 'Nunito';color:#5B4FA8">{{ activeChildStats.practiceTime }}</div>
+                      <div style="font:700 11px 'Nunito';color:#7A72C4">practice time</div>
+                    </div>
+                  </div>
+                  <div style="display:flex;align-items:end;gap:6px;height:52px">
+                    <sc-for list="{{ activeChildStats.weekBars }}" as="bar" hint-placeholder-count="7">
+                      <div style="flex:1;height:{{ bar.height }};background:{{ bar.color }};border-radius:4px"></div>
+                    </sc-for>
+                  </div>
+                </div>
+              </div>
+            </sc-if>
+
+          </div>
+
+          <!-- ===== BOTTOM TAB BAR ===== -->
+          <div style="position:absolute;left:0;right:0;bottom:0;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-top:1px solid rgba(0,0,0,.06);display:flex;padding:10px 6px 22px;z-index:30">
+            <button onClick="{{ setTabAAC }}" style="flex:1;background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer">
+              <div style="{{ navAacIconStyle }}"></div>
+              <span style="{{ navAacLabelStyle }}">AAC</span>
+            </button>
+            <button onClick="{{ setTabExercise }}" style="flex:1;background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer">
+              <div style="{{ navExerciseIconStyle }}"></div>
+              <span style="{{ navExerciseLabelStyle }}">Exercises</span>
+            </button>
+            <button onClick="{{ setTabPronunciation }}" style="flex:1;background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer">
+              <div style="{{ navPronunciationIconStyle }}"></div>
+              <span style="{{ navPronunciationLabelStyle }}">Speech</span>
+            </button>
+            <button onClick="{{ setTabTherapists }}" style="flex:1;background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer">
+              <div style="{{ navTherapistsIconStyle }}"></div>
+              <span style="{{ navTherapistsLabelStyle }}">Therapists</span>
+            </button>
+            <button onClick="{{ setTabProfile }}" style="flex:1;background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer">
+              <div style="{{ navProfileIconStyle }}"></div>
+              <span style="{{ navProfileLabelStyle }}">Profile</span>
+            </button>
+          </div>
+
+          <!-- ===== FLOATING AI BUTTON ===== -->
+          <sc-if value="{{ showAiButton }}" hint-placeholder-val="{{ true }}">
+            <button onClick="{{ toggleAI }}" style="position:absolute;right:16px;bottom:104px;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#3AA6A0,#8C86D6);border:none;box-shadow:0 6px 16px rgba(60,60,90,.28);z-index:40;display:flex;align-items:center;justify-content:center;cursor:pointer">
+              <div style="position:relative;width:20px;height:20px">
+                <div style="position:absolute;top:9px;left:0;width:20px;height:2px;background:#fff;border-radius:1px"></div>
+                <div style="position:absolute;left:9px;top:0;width:2px;height:20px;background:#fff;border-radius:1px"></div>
+              </div>
+            </button>
+          </sc-if>
+
+          <!-- ===== AI ASSISTANT SHEET ===== -->
+          <sc-if value="{{ aiOpen }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;inset:0;background:rgba(38,42,51,.35);z-index:50;display:flex;flex-direction:column;justify-content:flex-end" onClick="{{ closeAIBackdrop }}">
+              <div style="background:#fff;border-radius:22px 22px 0 0;padding:20px;animation:sheetUp .22s ease-out" onClick="{{ stopPropagation }}">
+                <div style="width:40px;height:5px;background:#E7E3D8;border-radius:3px;margin:0 auto 14px"></div>
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+                  <div style="width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#3AA6A0,#8C86D6)"></div>
+                  <div style="font:800 15px 'Nunito';color:#262A33">Hi, I'm Ra 👋</div>
+                </div>
+                <div style="background:#F5F3EC;border-radius:14px;padding:12px 14px;font:700 13px 'Nunito';color:#525661;margin-bottom:14px">Ask me anything about today's lesson, a sound your child is working on, or how to use the app.</div>
+                <div style="display:flex;gap:8px">
+                  <input type="text" placeholder="Ask Ra..." style="flex:1;height:46px;border-radius:12px;border:2px solid #E7E3D8;padding:0 14px;font:700 13px 'Nunito';outline:none;box-sizing:border-box"/>
+                  <button style="width:46px;height:46px;border-radius:12px;border:none;background:#262A33;color:#fff;font:800 16px 'Nunito';cursor:pointer">→</button>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- ===== CHILD SWITCH SHEET ===== -->
+          <sc-if value="{{ showChildSwitch }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;inset:0;background:rgba(38,42,51,.35);z-index:55;display:flex;flex-direction:column;justify-content:flex-end" onClick="{{ closeChildSwitchBackdrop }}">
+              <div style="background:#fff;border-radius:22px 22px 0 0;padding:20px;animation:sheetUp .22s ease-out" onClick="{{ stopPropagation }}">
+                <div style="width:40px;height:5px;background:#E7E3D8;border-radius:3px;margin:0 auto 14px"></div>
+                <div style="font:800 15px 'Nunito';color:#262A33;margin-bottom:12px">Switch child</div>
+                <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px">
+                  <sc-for list="{{ switchChildren }}" as="c" hint-placeholder-count="2">
+                    <button onClick="{{ c.onSwitch }}" style="{{ c.cardStyle }}">
+                      <div style="width:40px;height:40px;border-radius:50%;background:{{ c.avatarColor }};flex-shrink:0;display:flex;align-items:center;justify-content:center">
+                        <span style="font:900 15px 'Nunito';color:#262A33">{{ c.initial }}</span>
+                      </div>
+                      <div style="flex:1;text-align:left">
+                        <div style="font:800 14px 'Nunito';color:#262A33">{{ c.name }}</div>
+                        <div style="font:600 11px 'Nunito';color:#6B7280">Age {{ c.age }}</div>
+                      </div>
+                      <span style="{{ c.badgeStyle }}">{{ c.badgeLabel }}</span>
+                    </button>
+                  </sc-for>
+                </div>
+                <button onClick="{{ closeSwitchAndGoAddChild }}" style="width:100%;height:46px;border-radius:12px;border:2px dashed #D9D4C6;background:none;font:800 13px 'Nunito';color:#6B7280;cursor:pointer">+ Add another child</button>
+              </div>
+            </div>
+          </sc-if>
+
+        </div>
+      </sc-if>
+
+    </div>
+  </x-import>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const CATEGORY_TILES = {
+  food: [
+    { label: 'apple', bg: '#DCEEEC', iconColor: '#3AA6A0' },
+    { label: 'milk', bg: '#E7E5F7', iconColor: '#8C86D6' },
+    { label: 'more', bg: '#FBE7D8', iconColor: '#E8935F' },
+    { label: 'water', bg: '#E3EFE4', iconColor: '#6FA37A' },
+    { label: 'hungry', bg: '#E3ECF4', iconColor: '#5B8DBE' },
+    { label: 'done', bg: '#DCEEEC', iconColor: '#3AA6A0' },
+    { label: 'banana', bg: '#FBE7D8', iconColor: '#E8935F' },
+    { label: 'bread', bg: '#E7E5F7', iconColor: '#8C86D6' },
+    { label: 'cup', bg: '#E3ECF4', iconColor: '#5B8DBE' },
+    { label: 'snack', bg: '#E3EFE4', iconColor: '#6FA37A' },
+  ],
+  actions: [
+    { label: 'go', bg: '#E3EFE4', iconColor: '#6FA37A' },
+    { label: 'stop', bg: '#FBE7D8', iconColor: '#E8935F' },
+    { label: 'play', bg: '#E7E5F7', iconColor: '#8C86D6' },
+    { label: 'help', bg: '#E3ECF4', iconColor: '#5B8DBE' },
+    { label: 'open', bg: '#DCEEEC', iconColor: '#3AA6A0' },
+    { label: 'give', bg: '#FBE7D8', iconColor: '#E8935F' },
+    { label: 'look', bg: '#E7E5F7', iconColor: '#8C86D6' },
+    { label: 'sit', bg: '#E3ECF4', iconColor: '#5B8DBE' },
+    { label: 'wash', bg: '#DCEEEC', iconColor: '#3AA6A0' },
+    { label: 'sleep', bg: '#E3EFE4', iconColor: '#6FA37A' },
+  ],
+  feelings: [
+    { label: 'happy', bg: '#FBE7D8', iconColor: '#E8935F' },
+    { label: 'sad', bg: '#E3ECF4', iconColor: '#5B8DBE' },
+    { label: 'tired', bg: '#E7E5F7', iconColor: '#8C86D6' },
+    { label: 'scared', bg: '#E3EFE4', iconColor: '#6FA37A' },
+    { label: 'ok', bg: '#DCEEEC', iconColor: '#3AA6A0' },
+    { label: 'mad', bg: '#FBE7D8', iconColor: '#E8935F' },
+    { label: 'silly', bg: '#E7E5F7', iconColor: '#8C86D6' },
+    { label: 'proud', bg: '#DCEEEC', iconColor: '#3AA6A0' },
+    { label: 'sick', bg: '#E3ECF4', iconColor: '#5B8DBE' },
+    { label: 'excited', bg: '#E3EFE4', iconColor: '#6FA37A' },
+  ],
+  people: [
+    { label: 'mom', bg: '#E7E5F7', iconColor: '#8C86D6' },
+    { label: 'dad', bg: '#E3ECF4', iconColor: '#5B8DBE' },
+    { label: 'me', bg: '#DCEEEC', iconColor: '#3AA6A0' },
+    { label: 'friend', bg: '#E3EFE4', iconColor: '#6FA37A' },
+    { label: 'teacher', bg: '#FBE7D8', iconColor: '#E8935F' },
+    { label: 'baby', bg: '#E7E5F7', iconColor: '#8C86D6' },
+    { label: 'sister', bg: '#E3ECF4', iconColor: '#5B8DBE' },
+    { label: 'brother', bg: '#DCEEEC', iconColor: '#3AA6A0' },
+    { label: 'grandma', bg: '#FBE7D8', iconColor: '#E8935F' },
+    { label: 'doctor', bg: '#E3EFE4', iconColor: '#6FA37A' },
+  ],
+};
+
+const CORE_TINTS = [
+  ['#DCEEEC', '#3AA6A0'], ['#E7E5F7', '#8C86D6'], ['#FBE7D8', '#E8935F'],
+  ['#E3EFE4', '#6FA37A'], ['#E3ECF4', '#5B8DBE'],
+];
+const CORE_WORD_LIST = [
+  'I', 'you', 'want', 'more', 'go', 'stop', 'help', 'yes', 'no', 'like',
+  'not', 'in', 'on', 'out', 'up', 'down', 'big', 'little', 'hot', 'cold',
+  'my', 'it', 'this', 'that', 'here', 'there', 'look', 'give', 'get', 'put',
+  'come', 'again', 'all done', 'please', 'thank you', 'sorry', 'good', 'bad', 'happy', 'sad',
+  'eat', 'drink', 'play', 'open', 'close', 'wash', 'sleep', 'love', 'friend', 'home',
+];
+const CORE_WORDS = CORE_WORD_LIST.map((label, i) => ({ label, bg: CORE_TINTS[i % 5][0], iconColor: CORE_TINTS[i % 5][1] }));
+
+const EXERCISE_CATEGORIES = [
+  {
+    id: 'articulation', label: 'Articulation', glyph: 'A', bg: '#DCEEEC', iconColor: '#3AA6A0',
+    exercises: [
+      { title: 'Rolling R\'s', description: 'Practice saying words like "rabbit" and "run" with a clear R sound.', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+      { title: 'Sh Sound Safari', description: 'Say animal names starting with the "sh" sound, like "shark" and "sheep".', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+      { title: 'Lively L Words', description: 'Repeat simple words that start and end with the L sound.', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+      { title: 'Tricky T and D', description: 'Contrast T and D sounds using short word pairs like "ten" and "den".', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+    ],
+  },
+  {
+    id: 'breathing', label: 'Breathing', glyph: 'B', bg: '#E3ECF4', iconColor: '#5B8DBE',
+    exercises: [
+      { title: 'Bubble Breaths', description: 'Take a slow deep breath in, then blow out gently as if blowing bubbles.', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+      { title: 'Balloon Belly', description: 'Breathe into the belly like filling a balloon, then release slowly.', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+      { title: 'Long Blow Out', description: 'Take one breath and make a long "sssss" sound for as long as possible.', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+    ],
+  },
+  {
+    id: 'listen-point', label: 'Listen & Point', glyph: 'L', bg: '#FBE7D8', iconColor: '#E8935F',
+    exercises: [
+      { title: 'Listen and Point', description: 'Listen to a word and point to the matching picture on screen.' },
+    ],
+  },
+  {
+    id: 'phrases', label: 'Phrases', glyph: 'P', bg: '#E7E5F7', iconColor: '#8C86D6',
+    exercises: [
+      { title: 'Silly Sally', description: 'Repeat a short, playful tongue twister slowly, then a little faster.', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+      { title: 'Peter Picked', description: 'Practice a classic tongue twister focused on the P sound.', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+      { title: 'Three Word Chain', description: 'Repeat a short phrase of three words, keeping each sound clear.', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+    ],
+  },
+  {
+    id: 'rhythm', label: 'Rhythm & Syllables', glyph: 'R', bg: '#E3EFE4', iconColor: '#6FA37A',
+    exercises: [
+      { title: 'Clap the Beat', description: 'Clap once for each syllable while saying a word out loud.', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+      { title: 'Slow to Fast', description: 'Say a word slowly, breaking it into syllables, then say it at normal speed.', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+      { title: 'Syllable Stack', description: 'Build up a word one syllable at a time until saying the whole word.', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+    ],
+  },
+];
+
+const CHILD_AVATAR_COLORS = ['#3AA6A0', '#8C86D6', '#E8935F', '#6FA37A', '#5B8DBE'];
+
+const CHILD_PROGRESS = {
+  amira: { exercisesCompleted: 24, practiceTime: '3h 10m', week: [40, 70, 20, 90, 55, 15, 65] },
+  diaz: { exercisesCompleted: 9, practiceTime: '1h 05m', week: [20, 0, 45, 30, 10, 0, 25] },
+};
+const DEFAULT_PROGRESS = { exercisesCompleted: 0, practiceTime: '0m', week: [0, 0, 0, 0, 0, 0, 0] };
+
+const PRONUNCIATION_TYPES = {
+  sounds: { label: 'Sounds', glyph: 'S', bg: '#DCEEEC', iconColor: '#3AA6A0', description: 'practice a single sound', items: ['r', 'sh', 'l', 's', 'th'] },
+  words: { label: 'Words', glyph: 'W', bg: '#E7E5F7', iconColor: '#8C86D6', description: 'practice a whole word', items: ['rabbit', 'sunshine', 'lamp', 'fish', 'yellow'] },
+  picture: { label: 'Name the Picture', glyph: 'P', bg: '#FBE7D8', iconColor: '#E8935F', description: 'say the name of what you see', items: ['cat', 'ball', 'banana', 'car', 'shoe'] },
+};
+const PRONUNCIATION_PICTURE_COLORS = { cat: '#3AA6A0', ball: '#E8935F', banana: '#E8935F', car: '#8C86D6', shoe: '#5B8DBE' };
+
+const QUIZ_WORD_BANK = [
+  { label: 'cat', bg: '#DCEEEC', iconColor: '#3AA6A0' },
+  { label: 'dog', bg: '#E7E5F7', iconColor: '#8C86D6' },
+  { label: 'ball', bg: '#FBE7D8', iconColor: '#E8935F' },
+  { label: 'cup', bg: '#E3EFE4', iconColor: '#6FA37A' },
+  { label: 'shoe', bg: '#E3ECF4', iconColor: '#5B8DBE' },
+  { label: 'book', bg: '#DCEEEC', iconColor: '#3AA6A0' },
+  { label: 'banana', bg: '#FBE7D8', iconColor: '#E8935F' },
+  { label: 'car', bg: '#E7E5F7', iconColor: '#8C86D6' },
+  { label: 'apple', bg: '#E3EFE4', iconColor: '#6FA37A' },
+  { label: 'star', bg: '#E3ECF4', iconColor: '#5B8DBE' },
+];
+
+const THERAPISTS = [
+  { id: 1, name: 'Dr. Aliya Nurlanova', specialty: 'Articulation', city: 'Almaty', languages: 'KZ, RU', color: '#DCEEEC', stars: '★★★★★' },
+  { id: 2, name: 'Dr. Kenji Sato', specialty: 'Fluency', city: 'Astana', languages: 'JP, EN', color: '#E7E5F7', stars: '★★★★☆' },
+  { id: 3, name: 'Dr. Elena Popova', specialty: 'Early Language', city: 'Almaty', languages: 'RU, EN', color: '#FBE7D8', stars: '★★★★★' },
+  { id: 4, name: 'Dr. Marat Bekov', specialty: 'Breathing Therapy', city: 'Astana', languages: 'KZ, RU', color: '#E7F0D8', stars: '★★★★☆' },
+  { id: 5, name: 'Dr. Saya Tanaka', specialty: 'Articulation', city: 'Shymkent', languages: 'JP, EN', color: '#D8E7F0', stars: '★★★★★' },
+];
+const THERAPIST_CITIES = ['Almaty', 'Astana', 'Shymkent'];
+const THERAPIST_SPECIALTIES = ['Articulation', 'Breathing Therapy', 'Fluency', 'Early Language'];
+
+class Component extends DCLogic {
+  carouselRef = React.createRef();
+  categoryRowRef = React.createRef();
+
+  makeDragHandlers(ref) {
+    const st = { isDown: false, startX: 0, scrollLeft: 0 };
+    return {
+      onDown: e => {
+        const el = ref.current;
+        if (!el) return;
+        st.isDown = true;
+        st.startX = e.pageX;
+        st.scrollLeft = el.scrollLeft;
+        el.style.cursor = 'grabbing';
+      },
+      onMove: e => {
+        if (!st.isDown) return;
+        const el = ref.current;
+        if (!el) return;
+        e.preventDefault();
+        el.scrollLeft = st.scrollLeft - (e.pageX - st.startX);
+      },
+      onUp: () => {
+        st.isDown = false;
+        if (ref.current) ref.current.style.cursor = 'grab';
+      },
+    };
+  }
+
+  carouselDrag = this.makeDragHandlers(this.carouselRef);
+  categoryRowDrag = this.makeDragHandlers(this.categoryRowRef);
+
+  state = {
+    authed: false, authMode: 'login', authStep: 'form',
+    email: '', password: '', name: '', authError: '',
+    childName: '', childAge: null, childAvatar: null, childError: '',
+    activeTab: 'aac', aiOpen: false,
+    aacCategory: null, sentenceStrip: [],
+    exerciseCategory: null, exerciseId: null,
+    quizTarget: null, quizCardWords: [], quizFeedback: null,
+    quizRound: 0, quizTotal: 6, quizFirstTryCorrect: 0, quizMissedThisRound: false, quizComplete: false,
+    pronunciationType: null, pronunciationIndex: 0, pronunciationPhase: 'prompt', pronunciationResult: null,
+    therapistQuery: '', bookedIds: [], therapistSpecialty: null,
+    appLanguage: 'EN', notifsOn: true,
+    theme: 'light', showChangePassword: false,
+    children: [
+      { id: 'amira', name: 'Amira', age: 4, avatarColor: '#DCEEEC', lastPracticed: 'Today' },
+      { id: 'diaz', name: 'Diaz', age: 3, avatarColor: '#E7E5F7', lastPracticed: '3 days ago' },
+    ],
+    activeChildId: 'amira',
+    showAddChildForm: false, newChildName: '', newChildAge: null, newChildAvatar: null, newChildError: '',
+    pickingChild: false, showChildSwitch: false,
+  };
+
+  onNameChange = e => this.setState({ name: e.target.value });
+  onEmailChange = e => this.setState({ email: e.target.value, authError: '' });
+  onPasswordChange = e => this.setState({ password: e.target.value, authError: '' });
+
+  submitAuth = () => {
+    const { authMode, email, password, name } = this.state;
+    if (!email.trim() || !password.trim() || (authMode === 'signup' && !name.trim())) {
+      this.setState({ authError: 'Please fill in all fields.' });
+      return;
+    }
+    if (authMode === 'signup') {
+      this.setState({ authStep: 'addChild', authError: '' });
+    } else {
+      this.setState({ authed: true, authError: '', pickingChild: true });
+    }
+  };
+
+  onChildNameChange = e => this.setState({ childName: e.target.value, childError: '' });
+  selectChildAge = age => this.setState({ childAge: age, childError: '' });
+  selectChildAvatar = color => this.setState({ childAvatar: color });
+
+  submitChild = () => {
+    const { childName, childAge } = this.state;
+    if (!childName.trim() || !childAge) {
+      this.setState({ childError: 'Please add a name and age.' });
+      return;
+    }
+    this.setState({ authed: true, authStep: 'form' });
+  };
+  toggleAuthMode = () => this.setState(s => ({ authMode: s.authMode === 'login' ? 'signup' : 'login', authError: '' }));
+  showLoginTab = () => this.setState({ authMode: 'login', authError: '' });
+  showSignupTab = () => this.setState({ authMode: 'signup', authError: '' });
+
+  logout = () => this.setState({
+    authed: false, activeTab: 'aac', email: '', password: '', name: '', authStep: 'form',
+    childName: '', childAge: null, childAvatar: null, childError: '', pickingChild: false, showChildSwitch: false,
+  });
+
+  pickChild = id => this.setState({ activeChildId: id, pickingChild: false });
+  toggleChildSwitch = () => this.setState(s => ({ showChildSwitch: !s.showChildSwitch }));
+  closeChildSwitchBackdrop = () => this.setState({ showChildSwitch: false });
+  switchToChild = id => this.setState({ activeChildId: id, showChildSwitch: false });
+  goToAddChildFromPicker = () => this.setState({
+    showAddChildForm: true, newChildName: '', newChildAge: null, newChildAvatar: null, newChildError: '',
+  });
+  closeSwitchAndGoAddChild = () => this.setState({
+    showChildSwitch: false, activeTab: 'profile', showAddChildForm: true,
+    newChildName: '', newChildAge: null, newChildAvatar: null, newChildError: '',
+  });
+
+  setTab = tab => this.setState({ activeTab: tab });
+  toggleAI = () => this.setState(s => ({ aiOpen: !s.aiOpen }));
+  closeAIBackdrop = () => this.setState({ aiOpen: false });
+  stopPropagation = e => e.stopPropagation();
+
+  setCategory = cat => this.setState(s => ({ aacCategory: s.aacCategory === cat ? null : cat }));
+  tapTile = label => this.setState(s => ({ sentenceStrip: [...s.sentenceStrip, label] }));
+  speakStrip = () => this.setState({ sentenceStrip: [] });
+
+  openExerciseCategory = id => {
+    if (id === 'listen-point') {
+      this.setState({ exerciseCategory: id, exerciseId: 'Listen and Point' });
+      this.startQuiz();
+    } else {
+      this.setState({ exerciseCategory: id, exerciseId: null });
+    }
+  };
+
+  startQuiz = () => {
+    this.setState({ quizRound: 0, quizFirstTryCorrect: 0, quizComplete: false, quizMissedThisRound: false });
+    this.generateQuizQuestion();
+  };
+  backToCategories = () => this.setState({ exerciseCategory: null, exerciseId: null });
+  openExercise = title => {
+    const isQuiz = this.state.exerciseCategory === 'listen-point';
+    this.setState({ exerciseId: title });
+    if (isQuiz) this.generateQuizQuestion();
+  };
+  backToExerciseList = () => {
+    if (this.state.exerciseCategory === 'listen-point') {
+      this.setState({ exerciseCategory: null, exerciseId: null, quizFeedback: null });
+    } else {
+      this.setState({ exerciseId: null, quizFeedback: null });
+    }
+  };
+
+  generateQuizQuestion = () => {
+    const shuffled = [...QUIZ_WORD_BANK].sort(() => Math.random() - 0.5);
+    const picks = shuffled.slice(0, 3);
+    const target = picks[Math.floor(Math.random() * picks.length)];
+    this.setState({ quizTarget: target.label, quizCardWords: picks, quizFeedback: null, quizMissedThisRound: false });
+  };
+
+  answerQuiz = label => {
+    if (this.state.quizFeedback) return;
+    if (label === this.state.quizTarget) {
+      if (!this.state.quizMissedThisRound) {
+        this.setState(s => ({ quizFirstTryCorrect: s.quizFirstTryCorrect + 1 }));
+      }
+      this.setState({ quizFeedback: 'correct' });
+      setTimeout(() => {
+        const nextRound = this.state.quizRound + 1;
+        if (nextRound >= this.state.quizTotal) {
+          this.setState({ quizComplete: true });
+        } else {
+          this.setState({ quizRound: nextRound });
+          this.generateQuizQuestion();
+        }
+      }, 1300);
+    } else {
+      this.setState({ quizFeedback: 'incorrect', quizMissedThisRound: true });
+      setTimeout(() => this.setState({ quizFeedback: null }), 1300);
+    }
+  };
+
+  openPronunciationType = type => this.setState({
+    pronunciationType: type, pronunciationIndex: 0, pronunciationPhase: 'prompt', pronunciationResult: null,
+  });
+  backToPronunciationTypes = () => { clearTimeout(this._analyzeTimer); this.setState({ pronunciationType: null }); };
+
+  toggleRecording = () => {
+    const phase = this.state.pronunciationPhase;
+    if (phase === 'prompt') {
+      this.setState({ pronunciationPhase: 'recording' });
+    } else if (phase === 'recording') {
+      this.setState({ pronunciationPhase: 'analyzing' });
+      clearTimeout(this._analyzeTimer);
+      this._analyzeTimer = setTimeout(() => {
+        const result = Math.random() > 0.3 ? 'correct' : 'practice';
+        this.setState({ pronunciationPhase: 'result', pronunciationResult: result });
+      }, 1600);
+    }
+  };
+
+  nextWord = () => {
+    clearTimeout(this._analyzeTimer);
+    const type = PRONUNCIATION_TYPES[this.state.pronunciationType];
+    this.setState(s => ({
+      pronunciationIndex: (s.pronunciationIndex + 1) % type.items.length,
+      pronunciationPhase: 'prompt', pronunciationResult: null,
+    }));
+  };
+
+  onTherapistQueryChange = e => this.setState({ therapistQuery: e.target.value });
+  toggleTherapistSpecialty = spec => this.setState(s => ({ therapistSpecialty: s.therapistSpecialty === spec ? null : spec }));
+  toggleBook = id => this.setState(s => ({
+    bookedIds: s.bookedIds.includes(id) ? s.bookedIds.filter(x => x !== id) : [...s.bookedIds, id],
+  }));
+
+  setLang = l => this.setState({ appLanguage: l });
+  toggleNotifs = () => this.setState(s => ({ notifsOn: !s.notifsOn }));
+  setTheme = t => this.setState({ theme: t });
+  toggleChangePassword = () => this.setState(s => ({ showChangePassword: !s.showChangePassword }));
+
+  setActiveChild = id => this.setState({ activeChildId: id });
+
+  toggleAddChildForm = () => this.setState(s => ({
+    showAddChildForm: !s.showAddChildForm, newChildName: '', newChildAge: null, newChildAvatar: null, newChildError: '',
+  }));
+  onNewChildNameChange = e => this.setState({ newChildName: e.target.value, newChildError: '' });
+  selectNewChildAge = age => this.setState({ newChildAge: age, newChildError: '' });
+  selectNewChildAvatar = color => this.setState({ newChildAvatar: color });
+  saveNewChild = () => {
+    const { newChildName, newChildAge, newChildAvatar } = this.state;
+    if (!newChildName.trim() || !newChildAge) {
+      this.setState({ newChildError: 'Please add a name and age.' });
+      return;
+    }
+    const id = 'child-' + Date.now();
+    this.setState(s => ({
+      children: [...s.children, { id, name: newChildName.trim(), age: newChildAge, avatarColor: newChildAvatar || '#3AA6A0', lastPracticed: 'Not yet' }],
+      activeChildId: id, pickingChild: false,
+      showAddChildForm: false, newChildName: '', newChildAge: null, newChildAvatar: null, newChildError: '',
+    }));
+  };
+
+  chipStyle(active, color, tint) {
+    return `flex:none;padding:9px 16px;border-radius:12px;border:none;font:800 12px 'Nunito';cursor:pointer;background:${active ? color : '#F5F3EC'};color:${active ? '#fff' : '#6B7280'}`;
+  }
+
+  categoryPillStyle(active, color) {
+    return `flex:none;display:flex;align-items:center;gap:10px;padding:8px 22px 8px 8px;border-radius:30px;border:none;cursor:pointer;background:${active ? color : '#F5F3EC'}`;
+  }
+  categoryIconStyle(active, color) {
+    return `width:44px;height:44px;border-radius:50%;background:${active ? 'rgba(255,255,255,.9)' : color};flex-shrink:0`;
+  }
+  categoryLabelStyle(active) {
+    return `font:800 15px 'Nunito';color:${active ? '#fff' : '#6B7280'}`;
+  }
+
+  navIconStyle(active, color) {
+    return `width:24px;height:24px;border-radius:8px;background:${active ? color : '#D9D4C6'}`;
+  }
+  navLabelStyle(active, color) {
+    return `font:800 10px 'Nunito';color:${active ? color : '#9B9585'}`;
+  }
+
+  renderVals() {
+    const s = this.state;
+    const isLogin = s.authMode === 'login';
+    const isSignup = s.authMode === 'signup';
+
+    const tiles = (CATEGORY_TILES[s.aacCategory] || []).map(t => ({ ...t, onTap: () => this.tapTile(t.label) }));
+    const coreWords = CORE_WORDS.map(t => ({ ...t, onTap: () => this.tapTile(t.label) }));
+
+    const exerciseCategories = EXERCISE_CATEGORIES.map(c => ({
+      ...c, count: c.exercises.length, onOpen: () => this.openExerciseCategory(c.id),
+    }));
+    const rawActiveCategory = EXERCISE_CATEGORIES.find(c => c.id === s.exerciseCategory) || EXERCISE_CATEGORIES[0];
+    const activeExerciseCategory = {
+      ...rawActiveCategory,
+      exercises: rawActiveCategory.exercises.map(ex => ({ ...ex, onOpen: () => this.openExercise(ex.title) })),
+    };
+    const activeExercise = rawActiveCategory.exercises.find(ex => ex.title === s.exerciseId) || rawActiveCategory.exercises[0];
+
+    const q = s.therapistQuery.trim().toLowerCase();
+    const specialtyChips = THERAPIST_SPECIALTIES.map(spec => {
+      const active = s.therapistSpecialty === spec;
+      return {
+        label: spec, onToggle: () => this.toggleTherapistSpecialty(spec),
+        style: `border:none;border-radius:20px;padding:8px 14px;font:800 12px 'Nunito';cursor:pointer;white-space:nowrap;background:${active ? '#3AA6A0' : '#fff'};color:${active ? '#fff' : '#262A33'};box-shadow:0 1px 3px rgba(0,0,0,.05)`,
+      };
+    });
+    const filteredTherapists = THERAPISTS
+      .filter(t => !q || t.name.toLowerCase().includes(q) || t.specialty.toLowerCase().includes(q) || t.city.toLowerCase().includes(q))
+      .filter(t => !s.therapistSpecialty || t.specialty === s.therapistSpecialty)
+      .map(t => {
+        const booked = s.bookedIds.includes(t.id);
+        return {
+          ...t,
+          bookLabel: booked ? 'Booked ✓' : 'Book',
+          bookStyle: `border:none;border-radius:10px;padding:8px 14px;font:800 12px 'Nunito';cursor:pointer;flex-shrink:0;background:${booked ? '#E3EFE4' : '#262A33'};color:${booked ? '#4E7A57' : '#fff'}`,
+          onBook: () => this.toggleBook(t.id),
+        };
+      });
+
+    const activePronunciationType = s.pronunciationType ? PRONUNCIATION_TYPES[s.pronunciationType] : null;
+    const pronunciationTypeTiles = Object.keys(PRONUNCIATION_TYPES).map(id => {
+      const t = PRONUNCIATION_TYPES[id];
+      return { ...t, onOpen: () => this.openPronunciationType(id) };
+    });
+    let currentPronunciationTarget = '';
+    if (activePronunciationType) {
+      currentPronunciationTarget = activePronunciationType.items[s.pronunciationIndex % activePronunciationType.items.length];
+    }
+    const isPicture = s.pronunciationType === 'picture';
+
+    const ageOptions = [2, 3, 4, 5, 6].map(age => ({
+      age,
+      onSelect: () => this.selectChildAge(age),
+      style: `flex:1;height:44px;border-radius:12px;border:none;cursor:pointer;font:800 15px 'Nunito';background:${s.childAge === age ? '#262A33' : '#F5F3EC'};color:${s.childAge === age ? '#fff' : '#6B7280'}`,
+    }));
+    const avatarOptions = CHILD_AVATAR_COLORS.map(color => ({
+      color,
+      onSelect: () => this.selectChildAvatar(color),
+      style: `width:44px;height:44px;border-radius:50%;border:${s.childAvatar === color ? '3px solid #262A33' : '3px solid transparent'};cursor:pointer;background:${color}`,
+    }));
+
+    const profileChildren = s.children.map(c => {
+      const active = c.id === s.activeChildId;
+      return {
+        ...c,
+        onSetActive: () => this.setActiveChild(c.id),
+        cardStyle: `width:100%;box-sizing:border-box;display:flex;align-items:center;gap:12px;padding:12px;border-radius:14px;border:${active ? '2px solid #3AA6A0' : '2px solid transparent'};background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.05);cursor:pointer`,
+        badgeLabel: active ? 'Active' : 'Switch',
+        badgeStyle: `font:800 11px 'Nunito';padding:6px 10px;border-radius:10px;background:${active ? '#DCEEEC' : '#F5F3EC'};color:${active ? '#1F7A75' : '#6B7280'}`,
+      };
+    });
+    const pickerChildren = s.children.map(c => ({
+      ...c, initial: c.name.charAt(0).toUpperCase(), onPick: () => this.pickChild(c.id),
+    }));
+    const switchChildren = s.children.map(c => {
+      const active = c.id === s.activeChildId;
+      return {
+        ...c, initial: c.name.charAt(0).toUpperCase(), onSwitch: () => this.switchToChild(c.id),
+        cardStyle: `width:100%;box-sizing:border-box;display:flex;align-items:center;gap:12px;padding:10px;border-radius:14px;border:${active ? '2px solid #3AA6A0' : '2px solid transparent'};background:#F9F7F1;cursor:pointer`,
+        badgeLabel: active ? 'Active' : 'Switch',
+        badgeStyle: `font:800 11px 'Nunito';padding:6px 10px;border-radius:10px;background:${active ? '#DCEEEC' : '#F0EEE7'};color:${active ? '#1F7A75' : '#6B7280'}`,
+      };
+    });
+    const newChildAgeOptions = [2, 3, 4, 5, 6].map(age => ({
+      age,
+      onSelect: () => this.selectNewChildAge(age),
+      style: `flex:1;height:40px;border-radius:10px;border:none;cursor:pointer;font:800 14px 'Nunito';background:${s.newChildAge === age ? '#262A33' : '#F5F3EC'};color:${s.newChildAge === age ? '#fff' : '#6B7280'}`,
+    }));
+    const newChildAvatarOptions = CHILD_AVATAR_COLORS.map(color => ({
+      color,
+      onSelect: () => this.selectNewChildAvatar(color),
+      style: `width:38px;height:38px;border-radius:50%;border:${s.newChildAvatar === color ? '3px solid #262A33' : '3px solid transparent'};cursor:pointer;background:${color}`,
+    }));
+    const activeChild = s.children.find(c => c.id === s.activeChildId) || s.children[0];
+    const rawStats = CHILD_PROGRESS[s.activeChildId] || DEFAULT_PROGRESS;
+    const maxWeek = Math.max(...rawStats.week, 1);
+    const activeChildStats = {
+      exercisesCompleted: rawStats.exercisesCompleted,
+      practiceTime: rawStats.practiceTime,
+      weekBars: rawStats.week.map(v => ({ height: Math.max(6, Math.round((v / maxWeek) * 52)) + 'px', color: v > 0 ? '#8C86D6' : '#EFEBE0' })),
+    };
+
+    return {
+      showAuth: !s.authed && s.authStep === 'form', showApp: s.authed && !s.pickingChild,
+      showAddChild: !s.authed && s.authStep === 'addChild',
+      showChildPicker: s.authed && s.pickingChild,
+      pickerChildren, switchChildren,
+      showAddAnotherChildButton: !s.showAddChildForm,
+      goToAddChildFromPicker: this.goToAddChildFromPicker,
+      toggleChildSwitch: this.toggleChildSwitch, showChildSwitch: s.showChildSwitch,
+      closeChildSwitchBackdrop: this.closeChildSwitchBackdrop, closeSwitchAndGoAddChild: this.closeSwitchAndGoAddChild,
+      activeChildAvatarColor: activeChild ? activeChild.avatarColor : '#DCEEEC',
+      activeChildInitial: activeChild ? activeChild.name.charAt(0).toUpperCase() : 'Y',
+      isLogin, isSignup, hasAuthError: !!s.authError, authError: s.authError,
+      email: s.email, password: s.password, name: s.name,
+      onEmailChange: this.onEmailChange, onPasswordChange: this.onPasswordChange, onNameChange: this.onNameChange,
+      submitAuth: this.submitAuth, toggleAuthMode: this.toggleAuthMode,
+      showLoginTab: this.showLoginTab, showSignupTab: this.showSignupTab,
+      submitLabel: isLogin ? 'Log in' : 'Create account',
+      switchPrompt: isLogin ? "Don't have an account?" : 'Already have an account?',
+      switchAction: isLogin ? 'Sign up' : 'Log in',
+      loginTabStyle: `flex:1;padding:10px;border:none;border-radius:11px;font:800 13px 'Nunito';cursor:pointer;background:${isLogin ? '#fff' : 'transparent'};color:${isLogin ? '#262A33' : '#9B9585'};box-shadow:${isLogin ? '0 1px 3px rgba(0,0,0,.08)' : 'none'}`,
+      signupTabStyle: `flex:1;padding:10px;border:none;border-radius:11px;font:800 13px 'Nunito';cursor:pointer;background:${isSignup ? '#fff' : 'transparent'};color:${isSignup ? '#262A33' : '#9B9585'};box-shadow:${isSignup ? '0 1px 3px rgba(0,0,0,.08)' : 'none'}`,
+
+      showAAC: s.activeTab === 'aac', showExercise: s.activeTab === 'exercise',
+      showPronunciation: s.activeTab === 'pronunciation', showTherapists: s.activeTab === 'therapists',
+      showProfile: s.activeTab === 'profile',
+
+      setTabAAC: () => this.setTab('aac'), setTabExercise: () => this.setTab('exercise'),
+      setTabPronunciation: () => this.setTab('pronunciation'), setTabTherapists: () => this.setTab('therapists'),
+      setTabProfile: () => this.setTab('profile'),
+
+      navAacIconStyle: this.navIconStyle(s.activeTab === 'aac', '#3AA6A0'),
+      navAacLabelStyle: this.navLabelStyle(s.activeTab === 'aac', '#3AA6A0'),
+      navExerciseIconStyle: this.navIconStyle(s.activeTab === 'exercise', '#8C86D6'),
+      navExerciseLabelStyle: this.navLabelStyle(s.activeTab === 'exercise', '#8C86D6'),
+      navPronunciationIconStyle: this.navIconStyle(s.activeTab === 'pronunciation', '#E8935F'),
+      navPronunciationLabelStyle: this.navLabelStyle(s.activeTab === 'pronunciation', '#E8935F'),
+      navTherapistsIconStyle: this.navIconStyle(s.activeTab === 'therapists', '#6FA37A'),
+      navTherapistsLabelStyle: this.navLabelStyle(s.activeTab === 'therapists', '#6FA37A'),
+      navProfileIconStyle: this.navIconStyle(s.activeTab === 'profile', '#5B8DBE'),
+      navProfileLabelStyle: this.navLabelStyle(s.activeTab === 'profile', '#5B8DBE'),
+
+      aiOpen: s.aiOpen, toggleAI: this.toggleAI, closeAIBackdrop: this.closeAIBackdrop, stopPropagation: this.stopPropagation,
+      showAiButton: s.activeTab !== 'aac',
+
+      hasStrip: s.sentenceStrip.length > 0, sentenceStrip: s.sentenceStrip,
+      stripPlaceholder: s.sentenceStrip.length > 0 ? '' : 'tap tiles to speak a sentence...',
+      foodChipStyle: this.categoryPillStyle(s.aacCategory === 'food', '#3AA6A0'),
+      actionsChipStyle: this.categoryPillStyle(s.aacCategory === 'actions', '#8C86D6'),
+      feelingsChipStyle: this.categoryPillStyle(s.aacCategory === 'feelings', '#E8935F'),
+      peopleChipStyle: this.categoryPillStyle(s.aacCategory === 'people', '#5B8DBE'),
+      foodIconStyle: this.categoryIconStyle(s.aacCategory === 'food', '#3AA6A0'),
+      actionsIconStyle: this.categoryIconStyle(s.aacCategory === 'actions', '#8C86D6'),
+      feelingsIconStyle: this.categoryIconStyle(s.aacCategory === 'feelings', '#E8935F'),
+      peopleIconStyle: this.categoryIconStyle(s.aacCategory === 'people', '#5B8DBE'),
+      foodLabelStyle: this.categoryLabelStyle(s.aacCategory === 'food'),
+      actionsLabelStyle: this.categoryLabelStyle(s.aacCategory === 'actions'),
+      feelingsLabelStyle: this.categoryLabelStyle(s.aacCategory === 'feelings'),
+      peopleLabelStyle: this.categoryLabelStyle(s.aacCategory === 'people'),
+      setCatFood: () => this.setCategory('food'), setCatActions: () => this.setCategory('actions'),
+      setCatFeelings: () => this.setCategory('feelings'), setCatPeople: () => this.setCategory('people'),
+      carouselTiles: s.aacCategory === null ? coreWords : tiles,
+      carouselRef: this.carouselRef,
+      onCarouselMouseDown: this.carouselDrag.onDown, onCarouselMouseMove: this.carouselDrag.onMove, onCarouselMouseUp: this.carouselDrag.onUp,
+      categoryRowRef: this.categoryRowRef,
+      onCategoryRowMouseDown: this.categoryRowDrag.onDown, onCategoryRowMouseMove: this.categoryRowDrag.onMove, onCategoryRowMouseUp: this.categoryRowDrag.onUp,
+      speakStrip: this.speakStrip,
+      speakButtonStyle: `flex:none;width:48px;height:48px;border-radius:14px;border:none;cursor:pointer;background:${s.sentenceStrip.length ? '#3AA6A0' : '#D9D4C6'};display:flex;align-items:center;justify-content:center`,
+
+      showExerciseCategories: s.exerciseCategory === null,
+      showExerciseList: s.exerciseCategory !== null && s.exerciseId === null,
+      showExerciseDetail: s.exerciseCategory !== null && s.exerciseId !== null,
+      exerciseCategories, activeExerciseCategory, activeExercise,
+      backToCategories: this.backToCategories,
+      backToExerciseList: this.backToExerciseList,
+
+      isListenPointQuiz: s.exerciseCategory === 'listen-point' && s.exerciseId !== null && !s.quizComplete,
+      isVideoExercise: s.exerciseCategory !== 'listen-point' && s.exerciseId !== null,
+      quizTargetLabel: s.quizTarget || '',
+      quizCards: s.quizCardWords.map(w => ({ ...w, onTap: () => this.answerQuiz(w.label) })),
+      showQuizCorrect: s.quizFeedback === 'correct',
+      showQuizIncorrect: s.quizFeedback === 'incorrect',
+      quizProgressLabel: `Word ${Math.min(s.quizRound + 1, s.quizTotal)} of ${s.quizTotal}`,
+
+      showQuizComplete: s.exerciseCategory === 'listen-point' && s.exerciseId !== null && s.quizComplete,
+      quizScoreLabel: `${s.quizFirstTryCorrect} of ${s.quizTotal} correct on the first try`,
+      restartQuiz: this.startQuiz,
+
+      showPronunciationTypes: s.pronunciationType === null,
+      showPronunciationSession: s.pronunciationType !== null,
+      pronunciationTypeTiles,
+      activePronunciationTypeLabel: activePronunciationType ? activePronunciationType.label : '',
+      isPictureType: isPicture,
+      showTextPrompt: !isPicture,
+      promptTargetText: 'Say: ' + currentPronunciationTarget,
+      pictureIconColor: PRONUNCIATION_PICTURE_COLORS[currentPronunciationTarget] || '#3AA6A0',
+      recordButtonStyle: `width:64px;height:64px;margin:0 auto;border-radius:50%;border:none;cursor:${(s.pronunciationPhase === 'result' || s.pronunciationPhase === 'analyzing') ? 'default' : 'pointer'};background:${s.pronunciationPhase === 'recording' ? '#C4573D' : '#262A33'};color:#fff;font:800 22px 'Nunito';opacity:${s.pronunciationPhase === 'result' ? 0.35 : 1};display:flex;align-items:center;justify-content:center`,
+      recordIcon: s.pronunciationPhase === 'recording' ? '■' : '●',
+      isAnalyzing: s.pronunciationPhase === 'analyzing',
+      showRecordIcon: s.pronunciationPhase !== 'analyzing',
+      recordLabel: s.pronunciationPhase === 'recording' ? 'listening... tap to stop' : (s.pronunciationPhase === 'analyzing' ? 'checking...' : (s.pronunciationPhase === 'result' ? 'nice try!' : 'tap to record')),
+      toggleRecording: s.pronunciationPhase === 'analyzing' ? () => {} : this.toggleRecording,
+      showResult: s.pronunciationPhase === 'result',
+      resultHeadline: s.pronunciationResult === 'correct' ? '⭐ Great pronunciation!' : 'Good try — let\'s practice more',
+      resultAnswerLabel: currentPronunciationTarget,
+      resultCardStyle: `border-radius:16px;padding:18px;text-align:center;background:${s.pronunciationResult === 'correct' ? '#DCEEEC' : '#FBE7D8'};color:${s.pronunciationResult === 'correct' ? '#1F7A75' : '#B5713D'}`,
+      nextWord: this.nextWord,
+      backToPronunciationTypes: this.backToPronunciationTypes,
+
+      therapistQuery: s.therapistQuery, onTherapistQueryChange: this.onTherapistQueryChange,
+      specialtyChips,
+      filteredTherapists, noTherapistResults: filteredTherapists.length === 0,
+
+      parentName: s.name.trim() ? s.name : 'Parent Account',
+      langEnStyle: this.chipStyle(s.appLanguage === 'EN', '#3AA6A0'),
+      langKzStyle: this.chipStyle(s.appLanguage === 'KZ', '#8C86D6'),
+      langRuStyle: this.chipStyle(s.appLanguage === 'RU', '#E8935F'),
+      langJaStyle: this.chipStyle(s.appLanguage === 'JA', '#5B8DBE'),
+      setLangEn: () => this.setLang('EN'), setLangKz: () => this.setLang('KZ'),
+      setLangRu: () => this.setLang('RU'), setLangJa: () => this.setLang('JA'),
+      notifSwitchStyle: `width:46px;height:26px;border-radius:13px;border:none;cursor:pointer;background:${s.notifsOn ? '#3AA6A0' : '#D9D4C6'};position:relative;padding:0`,
+      notifKnobStyle: `position:absolute;top:3px;left:${s.notifsOn ? '23px' : '3px'};width:20px;height:20px;border-radius:50%;background:#fff;transition:left .15s`,
+      toggleNotifs: this.toggleNotifs,
+      logout: this.logout,
+
+      themeLightStyle: `flex:1;padding:6px 12px;border:none;border-radius:8px;font:800 12px 'Nunito';cursor:pointer;background:${s.theme === 'light' ? '#fff' : 'transparent'};color:${s.theme === 'light' ? '#262A33' : '#9B9585'};box-shadow:${s.theme === 'light' ? '0 1px 3px rgba(0,0,0,.08)' : 'none'}`,
+      themeDarkStyle: `flex:1;padding:6px 12px;border:none;border-radius:8px;font:800 12px 'Nunito';cursor:pointer;background:${s.theme === 'dark' ? '#262A33' : 'transparent'};color:${s.theme === 'dark' ? '#fff' : '#9B9585'}`,
+      setThemeLight: () => this.setTheme('light'), setThemeDark: () => this.setTheme('dark'),
+      showChangePassword: s.showChangePassword, toggleChangePassword: this.toggleChangePassword,
+
+      profileChildren,
+      toggleAddChildForm: this.toggleAddChildForm,
+      addChildToggleLabel: s.showAddChildForm ? 'Cancel' : '+ Add Child',
+      showAddChildForm: s.showAddChildForm,
+      newChildName: s.newChildName, onNewChildNameChange: this.onNewChildNameChange,
+      newChildAgeOptions, newChildAvatarOptions,
+      hasNewChildError: !!s.newChildError, newChildError: s.newChildError,
+      saveNewChild: this.saveNewChild,
+
+      activeChildName: activeChild ? activeChild.name : 'Your child',
+      activeChildStats,
+
+      childName: s.childName, onChildNameChange: this.onChildNameChange,
+      ageOptions, avatarOptions,
+      selectedAvatarPreviewStyle: `width:72px;height:72px;border-radius:50%;background:${s.childAvatar || '#EDEAE2'};border:2px dashed ${s.childAvatar ? 'transparent' : '#D9D4C6'}`,
+      hasChildError: !!s.childError, childError: s.childError,
+      submitChild: this.submitChild,
+    };
+  }
+}
+</script>
+</body>
+</html>

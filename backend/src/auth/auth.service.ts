@@ -37,6 +37,7 @@ export class AuthService {
       email: dto.email,
       passwordHash,
       name: dto.name,
+      language: dto.language,
     });
 
     const tokens = await this.issueTokens(user);

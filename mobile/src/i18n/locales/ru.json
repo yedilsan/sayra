@@ -1,0 +1,137 @@
+{
+  "common": {
+    "loading": "Загрузка...",
+    "retry": "Повторить",
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "continue": "Продолжить",
+    "back": "Назад",
+    "somethingWentWrong": "Что-то пошло не так.",
+    "error": "Ошибка"
+  },
+  "app": {
+    "name": "Say Ra",
+    "tagline": "Логопедия на нескольких языках — с игрой"
+  },
+  "tabs": {
+    "aac": "AAC",
+    "exercises": "Упражнения",
+    "pronunciation": "Речь",
+    "therapists": "Специалисты",
+    "profile": "Профиль"
+  },
+  "auth": {
+    "logIn": "Войти",
+    "signUp": "Регистрация",
+    "parentName": "Имя родителя",
+    "email": "Электронная почта",
+    "password": "Пароль",
+    "submitLogIn": "Войти",
+    "submitSignUp": "Создать аккаунт",
+    "errorFillFields": "Пожалуйста, заполните все поля.",
+    "errorInvalidCredentials": "Неверный email или пароль.",
+    "errorEmailInUse": "Этот email уже используется.",
+    "noAccountPrompt": "Нет аккаунта?",
+    "hasAccountPrompt": "Уже есть аккаунт?",
+    "errorEmailRequired": "Укажите электронную почту.",
+    "errorEmailInvalid": "Введите корректный адрес электронной почты.",
+    "errorPasswordRequired": "Введите пароль.",
+    "errorPasswordShort": "Пароль должен содержать не менее 8 символов",
+    "errorNameRequired": "Укажите имя.",
+    "errorEmailRegistered": "Этот email уже зарегистрирован. Попробуйте войти.",
+    "errorIncorrect": "Неверный email или пароль",
+    "errorNetwork": "Что-то пошло не так. Проверьте подключение и попробуйте снова."
+  },
+  "onboarding": {
+    "addChildTitle": "Добавьте ребёнка",
+    "addChildSubtitle": "ещё один шаг перед началом",
+    "namePlaceholder": "Имя ребёнка",
+    "age": "Возраст",
+    "errorMissingFields": "Пожалуйста, укажите имя и возраст.",
+    "whoIsPracticingTitle": "Кто занимается?",
+    "whoIsPracticingSubtitle": "выберите ребёнка, чтобы продолжить",
+    "addAnotherChild": "+ Добавить ещё ребёнка",
+    "ageLabel": "Возраст {{age}}"
+  },
+  "ai": {
+    "greeting": "Привет, я Ра 👋",
+    "intro": "Спросите меня о сегодняшнем занятии, звуке, над которым работает ваш ребёнок, или о том, как пользоваться приложением.",
+    "placeholder": "Спросить Ра..."
+  },
+  "childSwitch": {
+    "title": "Сменить ребёнка",
+    "active": "Активен",
+    "switch": "Выбрать"
+  },
+  "aac": {
+    "title": "Доска AAC",
+    "subtitle": "нажимайте на плитки, чтобы составить фразу",
+    "placeholder": "нажмите плитки, чтобы произнести фразу...",
+    "speakLabel": "произнести фразу"
+  },
+  "exercises": {
+    "title": "Упражнения",
+    "subtitle": "выберите область для тренировки",
+    "exerciseCount": "{{count}} упражнений",
+    "pointToThe": "покажи",
+    "quizProgress": "Слово {{current}} из {{total}}",
+    "correct": "★ Отлично!",
+    "incorrect": "Попробуй ещё раз!",
+    "quizCompleteTitle": "Молодец! Ты прошёл все слова!",
+    "quizCompleteScore": "{{correct}} из {{total}} правильно с первой попытки",
+    "tryAgain": "Попробовать снова",
+    "backToExercises": "К упражнениям",
+    "howToPractice": "Как выполнять",
+    "markComplete": "Отметить выполненным",
+    "completed": "Выполнено"
+  },
+  "pronunciation": {
+    "title": "Произношение",
+    "subtitle": "выберите, что тренировать",
+    "typeSounds": "Звуки",
+    "typeSoundsDesc": "Тренируйте отдельные звуки чётко.",
+    "typeWords": "Слова",
+    "typeWordsDesc": "Произносите слова целиком вслух.",
+    "typePicture": "Назови картинку",
+    "typePictureDesc": "Посмотрите на картинку и назовите её.",
+    "whatIsThis": "что это?",
+    "say": "скажи",
+    "tapToRecord": "нажмите, чтобы записать",
+    "listening": "слушаю... нажмите, чтобы остановить",
+    "checking": "проверяю...",
+    "done": "хорошая попытка!",
+    "resultGreat": "⭐ Отличное произношение!",
+    "resultPractice": "Хорошая попытка — потренируемся ещё",
+    "accuracy": "Точность: {{accuracy}}%",
+    "next": "Далее",
+    "permissionDenied": "Для записи нужен доступ к микрофону.",
+    "analyzeFailed": "Не удалось проверить запись. Попробуйте ещё раз."
+  },
+  "therapists": {
+    "title": "Логопеды",
+    "subtitle": "просмотр специалистов",
+    "searchPlaceholder": "Поиск по имени, специальности или городу",
+    "noResults": "Нет специалистов по вашему запросу",
+    "allSpecialties": "Все"
+  },
+  "profile": {
+    "title": "Профиль",
+    "interfaceLanguage": "Язык интерфейса",
+    "myChildren": "Мои дети",
+    "addChild": "+ Добавить ребёнка",
+    "settings": "Настройки",
+    "notifications": "Уведомления",
+    "theme": "Тема",
+    "light": "Светлая",
+    "dark": "Тёмная",
+    "logOut": "Выйти",
+    "progressTitle": "Прогресс: {{name}}",
+    "exercisesDone": "упражнений выполнено",
+    "practiceTime": "время занятий",
+    "pronunciationAttempts": "попыток произношения",
+    "avgAccuracy": "средняя точность",
+    "noProgressYet": "Пока нет записей о занятиях.",
+    "editName": "Ваше имя",
+    "saveName": "Сохранить"
+  }
+}

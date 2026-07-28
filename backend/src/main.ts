@@ -5,6 +5,11 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // The Expo app running on web issues cross-origin requests (and CORS preflights).
+  // Native builds don't need this, but without it the web target can't reach the API.
+  app.enableCors({ origin: true });
+
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
 
   const config = new DocumentBuilder()

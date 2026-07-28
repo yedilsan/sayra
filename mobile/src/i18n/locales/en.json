@@ -1,0 +1,137 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "retry": "Retry",
+    "save": "Save",
+    "cancel": "Cancel",
+    "continue": "Continue",
+    "back": "Back",
+    "somethingWentWrong": "Something went wrong.",
+    "error": "Error"
+  },
+  "app": {
+    "name": "Say Ra",
+    "tagline": "Multilingual speech therapy, made playful"
+  },
+  "tabs": {
+    "aac": "AAC",
+    "exercises": "Exercises",
+    "pronunciation": "Speech",
+    "therapists": "Therapists",
+    "profile": "Profile"
+  },
+  "auth": {
+    "logIn": "Log in",
+    "signUp": "Sign up",
+    "parentName": "Parent name",
+    "email": "Email",
+    "password": "Password",
+    "submitLogIn": "Log in",
+    "submitSignUp": "Create account",
+    "errorFillFields": "Please fill in all fields.",
+    "errorInvalidCredentials": "Invalid email or password.",
+    "errorEmailInUse": "That email is already in use.",
+    "noAccountPrompt": "Don't have an account?",
+    "hasAccountPrompt": "Already have an account?",
+    "errorEmailRequired": "Email is required.",
+    "errorEmailInvalid": "Enter a valid email address.",
+    "errorPasswordRequired": "Password is required.",
+    "errorPasswordShort": "Password must be at least 8 characters",
+    "errorNameRequired": "Name is required.",
+    "errorEmailRegistered": "This email is already registered. Try logging in instead.",
+    "errorIncorrect": "Incorrect email or password",
+    "errorNetwork": "Something went wrong. Please check your connection and try again."
+  },
+  "onboarding": {
+    "addChildTitle": "Add your child",
+    "addChildSubtitle": "one quick step before we get started",
+    "namePlaceholder": "Child's name",
+    "age": "Age",
+    "errorMissingFields": "Please add a name and age.",
+    "whoIsPracticingTitle": "Who's practicing?",
+    "whoIsPracticingSubtitle": "pick a child to continue",
+    "addAnotherChild": "+ Add another child",
+    "ageLabel": "Age {{age}}"
+  },
+  "ai": {
+    "greeting": "Hi, I'm Ra 👋",
+    "intro": "Ask me anything about today's lesson, a sound your child is working on, or how to use the app.",
+    "placeholder": "Ask Ra..."
+  },
+  "childSwitch": {
+    "title": "Switch child",
+    "active": "Active",
+    "switch": "Switch"
+  },
+  "aac": {
+    "title": "AAC Board",
+    "subtitle": "tap tiles to build a sentence",
+    "placeholder": "tap tiles to speak a sentence...",
+    "speakLabel": "speak sentence"
+  },
+  "exercises": {
+    "title": "Exercises",
+    "subtitle": "pick an area to practice",
+    "exerciseCount": "{{count}} exercises",
+    "pointToThe": "point to the",
+    "quizProgress": "Word {{current}} of {{total}}",
+    "correct": "★ Well done!",
+    "incorrect": "Try again!",
+    "quizCompleteTitle": "Great job! You finished all the words!",
+    "quizCompleteScore": "{{correct}} of {{total}} correct on the first try",
+    "tryAgain": "Try Again",
+    "backToExercises": "Back to Exercises",
+    "howToPractice": "How to practice",
+    "markComplete": "Mark complete",
+    "completed": "Completed"
+  },
+  "pronunciation": {
+    "title": "Pronunciation",
+    "subtitle": "choose what to practice",
+    "typeSounds": "Sounds",
+    "typeSoundsDesc": "Practice single sounds clearly.",
+    "typeWords": "Words",
+    "typeWordsDesc": "Say whole words out loud.",
+    "typePicture": "Name the Picture",
+    "typePictureDesc": "Look at a picture and name it.",
+    "whatIsThis": "what is this?",
+    "say": "say",
+    "tapToRecord": "tap to record",
+    "listening": "listening... tap to stop",
+    "checking": "checking...",
+    "done": "nice try!",
+    "resultGreat": "⭐ Great pronunciation!",
+    "resultPractice": "Good try — let's practice more",
+    "accuracy": "Accuracy: {{accuracy}}%",
+    "next": "Next",
+    "permissionDenied": "Microphone permission is needed to record.",
+    "analyzeFailed": "Couldn't check that recording. Please try again."
+  },
+  "therapists": {
+    "title": "Speech Therapists",
+    "subtitle": "browse and book a session",
+    "searchPlaceholder": "Search by name, specialty, or city",
+    "noResults": "No therapists match your filters",
+    "allSpecialties": "All"
+  },
+  "profile": {
+    "title": "Profile",
+    "interfaceLanguage": "Interface language",
+    "myChildren": "My Children",
+    "addChild": "+ Add Child",
+    "settings": "Settings",
+    "notifications": "Notifications",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "logOut": "Log out",
+    "progressTitle": "{{name}}'s progress",
+    "exercisesDone": "exercises done",
+    "practiceTime": "practice time",
+    "pronunciationAttempts": "pronunciation tries",
+    "avgAccuracy": "avg. accuracy",
+    "noProgressYet": "No practice recorded yet.",
+    "editName": "Your name",
+    "saveName": "Save"
+  }
+}
